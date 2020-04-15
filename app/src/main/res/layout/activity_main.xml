@@ -10,12 +10,33 @@
         android:id="@+id/txtCurrentSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="000.0 miles/hour"
+        android:text="000.0 km/h"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <CheckBox android:id="@+id/chkMetricUnits"
+    <TextView
+        android:id="@+id/txtGravityX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Use metric units?"/>
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/txtGravityY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/txtGravityZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/txtAccelerometrX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

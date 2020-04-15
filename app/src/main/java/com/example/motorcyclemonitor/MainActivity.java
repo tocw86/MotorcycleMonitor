@@ -10,20 +10,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
-import android.view.Menu;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends Activity implements IBaseGpsListener {
-
+    public SensorGravity sensorGravity;
+    public SensorAccelerometr sensorAccelerometr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sensorGravity = new SensorGravity(this);
+        sensorAccelerometr = new SensorAccelerometr(this);
+
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -36,17 +36,6 @@ public class MainActivity extends Activity implements IBaseGpsListener {
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             this.updateSpeed(null);
-
-            CheckBox chkUseMetricUntis = (CheckBox) this.findViewById(R.id.chkMetricUnits);
-            chkUseMetricUntis.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    // TODO Auto-generated method stub
-                    MainActivity.this.updateSpeed(null);
-                }
-            });
-            
             return;
         }
 
@@ -64,8 +53,11 @@ public class MainActivity extends Activity implements IBaseGpsListener {
 
         if(location != null)
         {
-            location.setUseMetricunits(this.useMetricUnits());
+            location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
+            if(nCurrentSpeed > 0){
+                nCurrentSpeed = (float) (nCurrentSpeed * 3.6);
+            }
         }
 
         Formatter fmt = new Formatter(new StringBuilder());
@@ -73,20 +65,10 @@ public class MainActivity extends Activity implements IBaseGpsListener {
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        String strUnits = "miles/hour";
-        if(this.useMetricUnits())
-        {
-            strUnits = "meters/second";
-        }
+        String strUnits = "km/h";
 
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
         txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
-    }
-
-    private boolean useMetricUnits() {
-        // TODO Auto-generated method stub
-        CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
-        return chkUseMetricUnits.isChecked();
     }
 
     @Override
@@ -94,7 +76,7 @@ public class MainActivity extends Activity implements IBaseGpsListener {
         // TODO Auto-generated method stub
         if(location != null)
         {
-            CLocation myLocation = new CLocation(location, this.useMetricUnits());
+            CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
         }
     }
