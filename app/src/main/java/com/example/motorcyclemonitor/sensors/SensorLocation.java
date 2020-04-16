@@ -1,8 +1,9 @@
-package com.example.motorcyclemonitor;
+package com.example.motorcyclemonitor.sensors;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,26 +13,36 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.motorcyclemonitor.listeners.GpsListener;
+import com.example.motorcyclemonitor.models.CLocation;
+import com.example.motorcyclemonitor.MainActivity;
+import com.example.motorcyclemonitor.R;
+
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 
 public class SensorLocation implements LocationListener {
 
-    public Context context;
+    public MainActivity mainActivity;
     public LocationManager locationManager;
-    public TextView gpsStatus;
+    public TextView txtGpsStatus;
     public TextView txtLat;
     public TextView txtLng;
     public TextView txtCurrentSpeed;
-
+    public TextView txtRawSpeed;
+    public GpsListener gpsStatus;
+    public final String strUnits = "km/h";
     public SensorLocation(MainActivity context) {
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        gpsStatus = (TextView) context.findViewById(R.id.txtGpsStatus);
-        txtLat = (TextView) context.findViewById(R.id.txtLat);
-        txtLng = (TextView) context.findViewById(R.id.txtLng);
-        txtCurrentSpeed = (TextView) context.findViewById(R.id.txtCurrentSpeed);
+        mainActivity = context;
+        locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
+        txtGpsStatus = (TextView) mainActivity.findViewById(R.id.txtGpsStatus);
+        txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
+        txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
+        txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
+        txtRawSpeed = (TextView) mainActivity.findViewById(R.id.txtRawSpeed);
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -41,8 +52,12 @@ public class SensorLocation implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }else{
+            gpsStatus = new GpsListener(mainActivity);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            this.onLocationChanged(null);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+            locationManager.addGpsStatusListener(gpsStatus);
+            //this.onLocationChanged(null);
         }
 
         if (locationManager != null) {
@@ -64,9 +79,10 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        txtCurrentSpeed.setText("0 " + strUnits);
+
         if(location != null){
             Log.i("xxx", "68");
-
             txtLat.setText(String.valueOf(location.getLatitude()));
             txtLng.setText(String.valueOf(location.getLongitude()));
             CLocation myLocation = new CLocation(location, true);
@@ -76,7 +92,7 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        gpsStatus.setText(String.valueOf(status));
+        txtGpsStatus.setText(String.valueOf(status));
 
     }
 
@@ -87,6 +103,7 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+        txtCurrentSpeed.setText("0 " + strUnits);
 
     }
 
@@ -98,6 +115,8 @@ public class SensorLocation implements LocationListener {
         {
             location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
+            txtRawSpeed.setText(String.valueOf(nCurrentSpeed));
+
             if(nCurrentSpeed > 0){
                 nCurrentSpeed = (float) (nCurrentSpeed * 3.6);
             }
@@ -108,7 +127,7 @@ public class SensorLocation implements LocationListener {
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        String strUnits = "km/h";
+
         txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 }

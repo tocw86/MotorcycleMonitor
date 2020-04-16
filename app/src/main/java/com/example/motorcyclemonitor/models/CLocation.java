@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor;
+package com.example.motorcyclemonitor.models;
 import android.location.Location;
 
 public class CLocation extends Location {
