@@ -2,6 +2,7 @@ package com.example.motorcyclemonitor;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.motorcyclemonitor.sensors.SensorLocation;
@@ -30,5 +31,9 @@ public class MainActivity extends Activity {
     {
         super.finish();
         System.exit(0);
+    }
+
+    public void calibrateSensors(View view) {
+        sensorRotation.calibrateSensors();
     }
 }

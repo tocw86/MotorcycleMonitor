@@ -48,4 +48,10 @@
             android:text="raw speed:"/>
         <TextView android:id="@+id/txtRawSpeed" android:layout_width="wrap_content" />
     </GridLayout>
+
+    <Button
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:onClick="calibrateSensors"
+        android:text="Calibrate"/>
 </LinearLayout>
