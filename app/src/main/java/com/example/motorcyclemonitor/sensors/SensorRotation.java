@@ -17,6 +17,8 @@ public class SensorRotation implements SensorEventListener {
     public MainActivity context;
     public SensorManager sensorManager;
     public TextView txtRoll;
+    public TextView txtCalibrationVal;
+    public TextView txtRawRoll;
     // Gravity rotational data
     private float gravity[];
     // Magnetic rotational data
@@ -29,6 +31,7 @@ public class SensorRotation implements SensorEventListener {
     private float azimuth;
     private float pitch;
     private float roll;
+    private float rawRoll;
     private float calibrateRollValue;
     private long lastUpdate;
 
@@ -38,6 +41,8 @@ public class SensorRotation implements SensorEventListener {
         context = mainActivity;
         calibrateRollValue = 0;
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
+        txtCalibrationVal = (TextView) context.findViewById(R.id.txtCalibrationVal);
+        txtRawRoll = (TextView) context.findViewById(R.id.txtRawRoll);
         sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         );
@@ -70,21 +75,19 @@ public class SensorRotation implements SensorEventListener {
                     values = lowPass(values, values);
                     azimuth = values[0] * 57.2957795f;
                     pitch =values[1] * 57.2957795f;
-                    roll = values[2] * 57.2957795f;
+                    roll = rawRoll = Math.round(values[2] * 57.2957795f);
+                    txtRawRoll.setText(String.valueOf(rawRoll));
+
                     if(calibrateRollValue != 0){
-                        if(calibrateRollValue < 0 && roll < 0){
-                            roll = roll + (calibrateRollValue * -1);
-                        }else if(calibrateRollValue > 0 && roll < 0){
-                            roll = roll + calibrateRollValue;
-                        }else if(calibrateRollValue < 0 && roll > 0){
-                            roll = roll - (calibrateRollValue * -1);
+                        if(calibrateRollValue < 0){
+                            roll = rawRoll - calibrateRollValue;
                         }else{
-                            roll = roll - calibrateRollValue;
+                            roll = rawRoll - calibrateRollValue;
                         }
                     }
                     mags = null;
                     accels = null;
-                    txtRoll.setText(String.valueOf(Math.round(roll)));
+                    txtRoll.setText(String.valueOf(roll));
                     lastUpdate = actualTime;
                 }
 
@@ -100,7 +103,9 @@ public class SensorRotation implements SensorEventListener {
     }
 
     public void calibrateSensors() {
-        calibrateRollValue = roll;
+        calibrateRollValue = 0;
+        calibrateRollValue = rawRoll;
+        txtCalibrationVal.setText(String.valueOf(calibrateRollValue));
     }
 
     protected float[] lowPass( float[] input, float[] output ) {
