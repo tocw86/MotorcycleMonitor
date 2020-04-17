@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cirlce_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.example.motorcyclemonitor.views.CircleView
+        android:id="@+id/cvView"
+        android:layout_width="wrap_content"
+        app:xMove="12"
+        app:yLine="0"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
+</LinearLayout>

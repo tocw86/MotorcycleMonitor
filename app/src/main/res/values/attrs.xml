@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleView">
+        <attr name="yLine" format="integer" />
+        <attr name="xMove" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,11 +1,13 @@
 package com.example.motorcyclemonitor;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,6 +35,11 @@ public class MainActivity extends Activity {
         //sensorAccelerometr = new SensorAccelerometr(this);
         sensorRotation = new SensorRotation(this);
         sensorLocation = new SensorLocation(this);
+
+        View cv = (View) this.findViewById(R.id.cirlce_layout);
+       CircleView xm = (CircleView) cv.findViewById(R.id.cvView);
+       xm.setxMove(200);
+
     }
     public void finish()
     {

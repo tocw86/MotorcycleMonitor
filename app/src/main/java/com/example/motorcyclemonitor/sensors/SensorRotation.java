@@ -1,6 +1,7 @@
 package com.example.motorcyclemonitor.sensors;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.motorcyclemonitor.MainActivity;
 import com.example.motorcyclemonitor.R;
+import com.example.motorcyclemonitor.views.CircleView;
 
 import java.security.Timestamp;
 
@@ -19,6 +21,7 @@ public class SensorRotation implements SensorEventListener {
     public TextView txtRoll;
     public TextView txtCalibrationVal;
     public TextView txtRawRoll;
+    public int xMove;
     // Gravity rotational data
     private float gravity[];
     // Magnetic rotational data
@@ -42,6 +45,8 @@ public class SensorRotation implements SensorEventListener {
         calibrateRollValue = 0;
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
         txtCalibrationVal = (TextView) context.findViewById(R.id.txtCalibrationVal);
+        Resources res = context.getResources();
+
         txtRawRoll = (TextView) context.findViewById(R.id.txtRawRoll);
         sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
