@@ -5,11 +5,15 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.motorcyclemonitor.sensors.SensorLocation;
 import com.example.motorcyclemonitor.sensors.SensorRotation;
@@ -21,7 +25,9 @@ public class MainActivity extends Activity {
     public TextView gpsStatus;
     public TextView txtLat;
     public TextView txtLng;
+    public ImageView imageView;
     public CircleView circleView;
+    public  View rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +35,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
-        txtLat = (TextView) this.findViewById(R.id.txtLat);
-        txtLng = (TextView) this.findViewById(R.id.txtLng);
+        rootLayout = (View) this.findViewById(R.id.root_layout);
+
+
+        //rootLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.main_bg_sunset));
+        //txtLat = (TextView) this.findViewById(R.id.txtLat);
+        //txtLng = (TextView) this.findViewById(R.id.txtLng);
         //sensorGravity = new SensorGravity(this);
         //sensorAccelerometr = new SensorAccelerometr(this);
 
