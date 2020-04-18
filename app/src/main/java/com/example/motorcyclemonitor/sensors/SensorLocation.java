@@ -30,7 +30,6 @@ public class SensorLocation implements LocationListener {
     public TextView txtLat;
     public TextView txtLng;
     public TextView txtCurrentSpeed;
-    public TextView txtRawSpeed;
     public GpsListener gpsStatus;
     public final String strUnits = "km/h";
     public SensorLocation(MainActivity context) {
@@ -40,7 +39,6 @@ public class SensorLocation implements LocationListener {
         txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
         txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
         txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
-        txtRawSpeed = (TextView) mainActivity.findViewById(R.id.txtRawSpeed);
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -82,7 +80,6 @@ public class SensorLocation implements LocationListener {
         txtCurrentSpeed.setText("0 " + strUnits);
 
         if(location != null){
-            Log.i("xxx", "68");
             txtLat.setText(String.valueOf(location.getLatitude()));
             txtLng.setText(String.valueOf(location.getLongitude()));
             CLocation myLocation = new CLocation(location, true);
@@ -93,18 +90,15 @@ public class SensorLocation implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         txtGpsStatus.setText(String.valueOf(status));
-
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
 
     @Override
     public void onProviderDisabled(String provider) {
         txtCurrentSpeed.setText("0 " + strUnits);
-
     }
 
      private void updateSpeed(CLocation location) {
@@ -115,19 +109,7 @@ public class SensorLocation implements LocationListener {
         {
             location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
-            txtRawSpeed.setText(String.valueOf(nCurrentSpeed));
-
-            if(nCurrentSpeed > 0){
-                nCurrentSpeed = (float) (nCurrentSpeed * 3.6);
-            }
         }
-
-        Formatter fmt = new Formatter(new StringBuilder());
-        fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
-        String strCurrentSpeed = fmt.toString();
-        strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
-
-
-        txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
+        txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)) + " " + strUnits);
     }
 }

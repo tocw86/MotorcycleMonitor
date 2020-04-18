@@ -33,12 +33,14 @@ public class MainActivity extends Activity {
         txtLng = (TextView) this.findViewById(R.id.txtLng);
         //sensorGravity = new SensorGravity(this);
         //sensorAccelerometr = new SensorAccelerometr(this);
-        sensorRotation = new SensorRotation(this);
-        sensorLocation = new SensorLocation(this);
 
         View cv = (View) this.findViewById(R.id.cirlce_layout);
-       CircleView xm = (CircleView) cv.findViewById(R.id.cvView);
-       xm.setxMove(200);
+        CircleView xm = (CircleView) cv.findViewById(R.id.cvView);
+
+        sensorRotation = new SensorRotation(this, xm);
+        sensorLocation = new SensorLocation(this);
+
+
 
     }
     public void finish()

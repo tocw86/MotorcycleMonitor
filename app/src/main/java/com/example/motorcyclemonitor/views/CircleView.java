@@ -21,6 +21,8 @@ public class CircleView extends View
     public CircleView(Context context,@Nullable AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(20);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.CircleView,
@@ -45,7 +47,12 @@ public class CircleView extends View
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        int xmoved = (canvas.getWidth() / 2) - xMove;
+        int xmoved = 0;
+        if(xMove < 0){
+            xmoved = (canvas.getWidth() / 2) - ((xMove*-1)*5);
+        }else{
+            xmoved = (canvas.getWidth() / 2) + (xMove * 5);
+        }
         canvas.drawLine(xmoved,0,canvas.getWidth() / 2, canvas.getHeight(), paint);
      }
 

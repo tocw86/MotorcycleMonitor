@@ -37,10 +37,10 @@ public class SensorRotation implements SensorEventListener {
     private float rawRoll;
     private float calibrateRollValue;
     private long lastUpdate;
-
-    public SensorRotation(MainActivity mainActivity) {
+    public CircleView cv;
+    public SensorRotation(MainActivity mainActivity, CircleView cv) {
         lastUpdate = System.currentTimeMillis();
-
+        this.cv = cv;
         context = mainActivity;
         calibrateRollValue = 0;
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
@@ -93,6 +93,7 @@ public class SensorRotation implements SensorEventListener {
                     mags = null;
                     accels = null;
                     txtRoll.setText(String.valueOf(roll));
+                    cv.setxMove((int) roll);
                     lastUpdate = actualTime;
                 }
 
