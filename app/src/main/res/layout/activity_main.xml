@@ -159,21 +159,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.example.motorcyclemonitor.views.GameView
+                    android:id="@+id/gameId"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:scaleType="fitXY"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/road" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/biker"
-                    android:scaleType="matrix"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/biker4" />
+                    android:layout_height="match_parent">
+                </com.example.motorcyclemonitor.views.GameView>
 
             </RelativeLayout>
 

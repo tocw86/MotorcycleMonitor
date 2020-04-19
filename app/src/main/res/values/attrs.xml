@@ -4,4 +4,8 @@
         <attr name="yLine" format="integer" />
         <attr name="xMove" format="integer" />
     </declare-styleable>
+    <declare-styleable name="GameView">
+        <attr name="roll" format="integer" />
+        <attr name="speed" format="integer"/>
+    </declare-styleable>
 </resources>

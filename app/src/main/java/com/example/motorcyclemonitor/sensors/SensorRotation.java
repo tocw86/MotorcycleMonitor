@@ -2,7 +2,6 @@ package com.example.motorcyclemonitor.sensors;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import com.example.motorcyclemonitor.MainActivity;
 import com.example.motorcyclemonitor.R;
-import com.example.motorcyclemonitor.views.CircleView;
-
-import java.security.Timestamp;
+import com.example.motorcyclemonitor.views.GameView;
 
 public class SensorRotation implements SensorEventListener {
     static final float ALPHA = 0.25f;
@@ -40,28 +37,17 @@ public class SensorRotation implements SensorEventListener {
     private float rawRoll;
     private float calibrateRollValue;
     private long lastUpdate;
-    public CircleView cv;
+    public GameView gameView;
     public ImageView imageView;
     public View bikerView;
-    public SensorRotation(MainActivity mainActivity, CircleView cv) {
+    public SensorRotation(MainActivity mainActivity, GameView gameView) {
         lastUpdate = System.currentTimeMillis();
-        this.cv = cv;
+        this.gameView = gameView;
         context = mainActivity;
         calibrateRollValue = 0;
-        imageView = (ImageView) context.findViewById(R.id.biker);
-        imageView.setAdjustViewBounds(true);
- /*       Matrix matrix = new Matrix();
-        imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
-        matrix.postRotate((float) angle, pivotX, pivotY);
-        imageView.setImageMatrix(matrix);
-        */
-
         bikerView = (View) context.findViewById(R.id.biker_layout);
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
-       // txtCalibrationVal = (TextView) context.findViewById(R.id.txtCalibrationVal);
         Resources res = context.getResources();
-
-        //txtRawRoll = (TextView) context.findViewById(R.id.txtRawRoll);
         sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         );
@@ -95,8 +81,6 @@ public class SensorRotation implements SensorEventListener {
                     azimuth = values[0] * 57.2957795f;
                     pitch =values[1] * 57.2957795f;
                     roll = rawRoll = Math.round(values[2] * 57.2957795f);
-                    //txtRawRoll.setText(String.valueOf(rawRoll));
-
                     if(calibrateRollValue != 0){
                         if(calibrateRollValue < 0){
                             roll = rawRoll - calibrateRollValue;
@@ -107,14 +91,7 @@ public class SensorRotation implements SensorEventListener {
                     mags = null;
                     accels = null;
                     txtRoll.setText(String.valueOf(roll));
-
-                    Matrix matrix=new Matrix();
-                    imageView.setScaleType(ImageView.ScaleType.MATRIX);
-                    matrix.setScale(1f,1f, ((bikerView.getWidth() / 2) - imageView.getDrawable().getBounds().width()/2), bikerView.getHeight() / 2);
-                    matrix.postRotate(roll, imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height());
-                    imageView.setImageMatrix(matrix);
-                    imageView.setPadding(((bikerView.getWidth() / 2) - imageView.getDrawable().getBounds().width()/2),0,0,0);
-
+                    gameView.setRoll((int) roll);
                     lastUpdate = actualTime;
                 }
 

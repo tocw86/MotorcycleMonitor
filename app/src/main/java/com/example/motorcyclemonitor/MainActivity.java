@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +20,15 @@ import androidx.core.content.ContextCompat;
 import com.example.motorcyclemonitor.sensors.SensorLocation;
 import com.example.motorcyclemonitor.sensors.SensorRotation;
 import com.example.motorcyclemonitor.views.CircleView;
+import com.example.motorcyclemonitor.views.GameView;
 
 public class MainActivity extends Activity {
     public SensorRotation sensorRotation;
     public SensorLocation sensorLocation;
     public TextView gpsStatus;
-    public TextView txtLat;
-    public TextView txtLng;
-    public ImageView imageView;
-    public CircleView circleView;
     public  View rootLayout;
-
+    private Handler frame = new Handler();
+    private static final int FRAME_RATE = 150;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,21 +36,63 @@ public class MainActivity extends Activity {
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         rootLayout = (View) this.findViewById(R.id.root_layout);
-
-
-        //rootLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.main_bg_sunset));
-        //txtLat = (TextView) this.findViewById(R.id.txtLat);
-        //txtLng = (TextView) this.findViewById(R.id.txtLng);
-        //sensorGravity = new SensorGravity(this);
-        //sensorAccelerometr = new SensorAccelerometr(this);
-
-        View cv = (View) this.findViewById(R.id.cirlce_layout);
-        CircleView xm = (CircleView) cv.findViewById(R.id.cvView);
-
-        sensorRotation = new SensorRotation(this, xm);
+        GameView gameView = (GameView) this.findViewById(R.id.gameId);
+        sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this);
+        Handler h = new Handler();
+
+        h.postDelayed(new Runnable() {
+
+            @Override
+
+            public void run() {
+
+                initGfx();
+
+            }
+
+        }, 1000);
 
     }
+
+    synchronized public void initGfx() {
+
+
+        //It's a good idea to remove any existing callbacks to keep
+
+        //them from inadvertently stacking up.
+
+        frame.removeCallbacks(frameUpdate);
+
+        frame.postDelayed(frameUpdate, FRAME_RATE);
+
+    }
+    private Runnable frameUpdate = new Runnable() {
+
+        @Override
+
+        synchronized public void run() {
+
+            frame.removeCallbacks(frameUpdate);
+
+            //make any updates to on screen objects here
+
+            //then invoke the on draw by invalidating the canvas
+            int newSpeed = ((GameView)findViewById(R.id.gameId)).speed;
+
+            if(newSpeed >= ((GameView)findViewById(R.id.gameId)).getHeight()){
+                ((GameView)findViewById(R.id.gameId)).setSpeed(100);
+            }else{
+                ((GameView)findViewById(R.id.gameId)).setSpeed(newSpeed + 100);
+
+            }
+            ((GameView)findViewById(R.id.gameId)).invalidate();
+
+            frame.postDelayed(frameUpdate, FRAME_RATE);
+
+        }
+
+    };
     public void finish()
     {
         super.finish();
