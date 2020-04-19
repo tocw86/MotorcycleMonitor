@@ -35,8 +35,8 @@ public class SensorLocation implements LocationListener {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
         txtGpsStatus = (TextView) mainActivity.findViewById(R.id.txtGpsStatus);
-        //txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
-        //txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
+        txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
+        txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
         txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -54,19 +54,19 @@ public class SensorLocation implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
             locationManager.addGpsStatusListener(gpsStatus);
-            //this.onLocationChanged(null);
+            this.onLocationChanged(null);
         }
 
         if (locationManager != null) {
             Location lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastKnownLocationGPS != null) {
-              //  txtLat.setText(String.valueOf(lastKnownLocationGPS.getLatitude()));
-               // txtLng.setText(String.valueOf(lastKnownLocationGPS.getLongitude()));
+                txtLat.setText(String.valueOf(lastKnownLocationGPS.getLatitude()));
+               txtLng.setText(String.valueOf(lastKnownLocationGPS.getLongitude()));
             } else {
                 Location loc =  locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
                if(loc != null){
-                   //txtLat.setText(String.valueOf(loc.getLatitude()));
-                  /// txtLng.setText(String.valueOf(loc.getLongitude()));
+                   txtLat.setText(String.valueOf(loc.getLatitude()));
+                   txtLng.setText(String.valueOf(loc.getLongitude()));
                }
             }
         } else {
@@ -76,10 +76,15 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+
+        Log.d("xxx", String.valueOf(80));
+
         txtCurrentSpeed.setText("0");
 
         if(location != null){
             CLocation myLocation = new CLocation(location, true);
+             txtLat.setText(String.valueOf(location.getLatitude()));
+            txtLng.setText(String.valueOf(location.getLongitude()));
             this.updateSpeed(myLocation);
         }
     }
@@ -95,7 +100,7 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        txtCurrentSpeed.setText("0");
+
     }
 
      private void updateSpeed(CLocation location) {
@@ -107,6 +112,7 @@ public class SensorLocation implements LocationListener {
             location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
         }
+        Log.d("xxx", String.valueOf(nCurrentSpeed));
         txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
 }

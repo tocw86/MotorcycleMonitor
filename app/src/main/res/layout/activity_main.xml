@@ -118,12 +118,27 @@
 
             <Button
                 android:layout_width="202dp"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:fontFamily="@font/anton"
                 android:onClick="calibrateSensors"
                 android:text="Calibrate"
                 android:visibility="invisible" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtLat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="10dp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtLng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="10dp" />
+
         </LinearLayout>
 
         <LinearLayout
