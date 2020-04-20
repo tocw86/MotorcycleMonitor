@@ -13,12 +13,16 @@ import android.util.Log;
 import com.example.motorcyclemonitor.R;
 import com.example.motorcyclemonitor.views.GameView;
 
+import java.util.Random;
+
 public class GameRepository {
 
     public static final int darkGreen = Color.rgb(1,103,1);
     public static final int red = Color.RED;
     public static final int darkGray = Color.rgb(103, 103, 103);
     public static final int lightGreen = Color.rgb(0,197,0);
+    public static final int lightGray = Color.rgb(142,140,142);
+
 
 //#676767
     public static void drawGreenPlane(Canvas canvas, GameView gameView) {
@@ -31,10 +35,42 @@ public class GameRepository {
 
     public static void drawBiker(Canvas canvas, Resources resources, GameView gameView, int width, int roll) {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
-        Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker4);
+        Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker5);
         Matrix matrix = new Matrix();
-        matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
-        matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)), (float) (paddingTop - (bitmapOrg.getHeight() * 0.8)));
+        roll = 0;
+        if(roll > 7 || roll < -7){
+            matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
+        }else{
+            matrix.setRotate(0, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
+        }
+        if(gameView.speed > 20){
+
+            Random rand = new Random();
+            int randX = rand.nextInt(5);
+            rand = new Random();
+            int randY = rand.nextInt(15);
+
+            rand = new Random();
+            int unsigned = rand.nextInt(2);
+            if(unsigned == 2){
+                randX = randX * -1;
+            }else{
+                randY = randY * -1;
+            }
+
+            rand = new Random();
+            int canMove = rand.nextInt(20);
+            if(canMove == 1){
+                matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)) + randX, (float) (paddingTop - (bitmapOrg.getHeight() * 0.8)) + randY);
+            }else{
+                matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)), (float) (paddingTop - (bitmapOrg.getHeight() * 0.8)));
+
+            }
+
+        }else{
+            matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)), (float) (paddingTop - (bitmapOrg.getHeight() * 0.8)));
+
+        }
         canvas.drawBitmap(bitmapOrg, matrix, null);
     }
 
@@ -86,6 +122,7 @@ public class GameRepository {
 
     public static void drawRoadLines(Canvas canvas, GameView gameView) {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
+        int paddingTopSecond = (int) Math.round(gameView.getHeight() * 0.9);
 
         Paint linePaint = new Paint();
         linePaint.setStrokeWidth(0);
@@ -95,7 +132,35 @@ public class GameRepository {
         grassPaint.setStrokeWidth(0);
         grassPaint.setColor(lightGreen);
 
-        canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop + gameView.posY), gameView.getWidth() / 2 + 5 , ((paddingTop + 100) + gameView.posY), linePaint);
+        Log.d("xxx", String.valueOf(gameView.posY));
+
+        if(gameView.posY <= gameView.animationJump){
+            canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop), gameView.getWidth() / 2 + 5 , ((paddingTop) + gameView.posY), linePaint);
+        }else{
+            canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop + gameView.posY), gameView.getWidth() / 2 + 5 , ((paddingTop + (gameView.animationJump * 2)) + gameView.posY), linePaint);
+        }
+
+      /*  canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop + gameView.posY), gameView.getWidth() / 2 + 5 , ((paddingTop + 100) + gameView.posY), linePaint);
+
+        if(((paddingTopSecond + gameView.posY)) < gameView.getHeight()){
+            canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTopSecond + gameView.posY), gameView.getWidth() / 2 + 5 , ((paddingTopSecond + 100) + gameView.posY), linePaint);
+        }else{
+            canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop + gameView.posY), gameView.getWidth() / 2 + 5 , ((paddingTop + 100) + gameView.posY), linePaint);
+        }*/
+
+    }
+
+    public static void drawRoadLighted(Canvas canvas, GameView gameView) {
+        int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
+        Paint linePaint = new Paint();
+        linePaint.setStrokeWidth(0);
+        linePaint.setColor(lightGreen);
+
+        if(gameView.posY <= gameView.animationJump){
+            canvas.drawRect(0, (paddingTop), gameView.getWidth(), ((paddingTop) + gameView.posY), linePaint);
+        }else{
+            canvas.drawRect(0, (paddingTop + gameView.posY), gameView.getWidth() , ((paddingTop + (gameView.animationJump * 2)) + gameView.posY), linePaint);
+        }
 
     }
 }

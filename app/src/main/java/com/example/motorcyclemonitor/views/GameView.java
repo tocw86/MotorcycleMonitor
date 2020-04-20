@@ -24,6 +24,7 @@ public class GameView  extends View {
     long lastUpdate;
     public int speed;
     public int posY;
+    public int animationJump = 60;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -68,8 +69,9 @@ public class GameView  extends View {
         GameRepository.drawGreenPlane(canvas, this);
         GameRepository.drawRedLines(canvas, this);
         GameRepository.drawRoad(canvas, this);
+        GameRepository.drawRoadLighted(canvas, this);
         GameRepository.drawRoadLines(canvas, this);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
+        //GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
 
         invalidate();
     }

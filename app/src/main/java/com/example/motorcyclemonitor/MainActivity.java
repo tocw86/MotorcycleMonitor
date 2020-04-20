@@ -1,6 +1,8 @@
 package com.example.motorcyclemonitor;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,7 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.motorcyclemonitor.sensors.SensorLocation;
@@ -22,25 +27,63 @@ import com.example.motorcyclemonitor.sensors.SensorRotation;
 import com.example.motorcyclemonitor.views.CircleView;
 import com.example.motorcyclemonitor.views.GameView;
 
+import io.sentry.core.Sentry;
+
 public class MainActivity extends Activity {
     public SensorRotation sensorRotation;
     public SensorLocation sensorLocation;
     public TextView gpsStatus;
-    public  View rootLayout;
+    public View rootLayout;
     private Handler frame = new Handler();
     public GameView gameView;
-    public int animationJump = 60;
+    public int animationJump;
     public int frameRate = 10000;
+    public int gameHeight;
+
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+
+        if(Integer.valueOf(android.os.Build.VERSION.SDK_INT) > 22){
+            if (!hasPermissions(this, PERMISSIONS)) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+            }else{
+                startApp();
+            }
+        }else{
+            startApp();
+        }
+    }
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void startApp(){
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         rootLayout = (View) this.findViewById(R.id.root_layout);
         gameView = (GameView) this.findViewById(R.id.gameId);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this);
+        gameHeight = gameView.getHeight();
+        animationJump = gameView.animationJump;
         Handler h = new Handler();
 
         h.postDelayed(new Runnable() {
@@ -54,7 +97,12 @@ public class MainActivity extends Activity {
             }
 
         }, 1000);
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        startApp();
     }
 
     synchronized public void initGfx() {
@@ -69,6 +117,8 @@ public class MainActivity extends Activity {
         frame.postDelayed(frameUpdate, frameRate);
 
     }
+
+
     private Runnable frameUpdate = new Runnable() {
 
         @Override
@@ -84,9 +134,9 @@ public class MainActivity extends Activity {
             int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
 
 
-            if((newPosY + paddingTop) >= gameView.getHeight()){
+            if ((newPosY + paddingTop) >= gameView.getHeight()) {
                 gameView.setPosY(animationJump);
-            }else{
+            } else {
                 gameView.setPosY(newPosY + animationJump);
 
             }
@@ -102,8 +152,7 @@ public class MainActivity extends Activity {
         this.frameRate = frameRate;
     }
 
-    public void finish()
-    {
+    public void finish() {
         super.finish();
         System.exit(0);
     }
@@ -111,5 +160,4 @@ public class MainActivity extends Activity {
     public void calibrateSensors(View view) {
         sensorRotation.calibrateSensors();
     }
-
-}
+ }

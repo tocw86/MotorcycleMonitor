@@ -17,7 +17,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:testOnly="false"
         android:theme="@style/AppTheme">
+        <meta-data android:name="io.sentry.dsn" android:value="https://21a3ab80b1944b1987516fd0d19a1af1@o380669.ingest.sentry.io/5206804"  />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -40,6 +40,8 @@ public class SensorLocation implements LocationListener {
         txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -70,14 +72,11 @@ public class SensorLocation implements LocationListener {
                }
             }
         } else {
-            Log.i("xxx", "null");
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
-        Log.d("xxx", String.valueOf(80));
 
         txtCurrentSpeed.setText("0");
 
@@ -108,13 +107,13 @@ public class SensorLocation implements LocationListener {
         if(nCurrentSpeed == 0){
             mainActivity.setFrameRate(10000);
         }else if(nCurrentSpeed > 10 && nCurrentSpeed < 30){
-            mainActivity.setFrameRate(650);
+            mainActivity.setFrameRate(500);
         }else if (nCurrentSpeed > 30 && nCurrentSpeed < 50){
-            mainActivity.setFrameRate(400);
+            mainActivity.setFrameRate(300);
         }else if (nCurrentSpeed > 50 && nCurrentSpeed < 80){
-            mainActivity.setFrameRate(250);
+            mainActivity.setFrameRate(120);
         }else if (nCurrentSpeed > 80 && nCurrentSpeed < 110){
-            mainActivity.setFrameRate(100);
+            mainActivity.setFrameRate(70);
         }else{
             mainActivity.setFrameRate(50);
         }
@@ -130,6 +129,7 @@ public class SensorLocation implements LocationListener {
             nCurrentSpeed = location.getSpeed();
         }
         this.checkSpeedAndAdjustGraphics(nCurrentSpeed);
+        this.mainActivity.gameView.setSpeed((int) nCurrentSpeed);
         txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
 }
