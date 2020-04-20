@@ -29,8 +29,8 @@ public class MainActivity extends Activity {
     public  View rootLayout;
     private Handler frame = new Handler();
     public GameView gameView;
-    public int animationJump = 40;
-    private static final int FRAME_RATE = 500;
+    public int animationJump = 60;
+    public int frameRate = 10000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 
         frame.removeCallbacks(frameUpdate);
 
-        frame.postDelayed(frameUpdate, FRAME_RATE);
+        frame.postDelayed(frameUpdate, frameRate);
 
     }
     private Runnable frameUpdate = new Runnable() {
@@ -80,29 +80,28 @@ public class MainActivity extends Activity {
             //make any updates to on screen objects here
 
             //then invoke the on draw by invalidating the canvas
-            int newSpeed = gameView.speed;
-            int newSpeed2 = gameView.speed2;
+            int newPosY = gameView.posY;
             int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
 
-            if(newSpeed > 120 || newSpeed2 > animationJump){
-                gameView.setSpeed2(newSpeed2 + animationJump);
-            }else{
-                gameView.setSpeed2(animationJump);
-            }
 
-            if((newSpeed + paddingTop) >= gameView.getHeight()){
-                gameView.setSpeed(animationJump);
+            if((newPosY + paddingTop) >= gameView.getHeight()){
+                gameView.setPosY(animationJump);
             }else{
-                gameView.setSpeed(newSpeed + animationJump);
+                gameView.setPosY(newPosY + animationJump);
 
             }
             gameView.invalidate();
 
-            frame.postDelayed(frameUpdate, FRAME_RATE);
+            frame.postDelayed(frameUpdate, frameRate);
 
         }
 
     };
+
+    public void setFrameRate(int frameRate) {
+        this.frameRate = frameRate;
+    }
+
     public void finish()
     {
         super.finish();

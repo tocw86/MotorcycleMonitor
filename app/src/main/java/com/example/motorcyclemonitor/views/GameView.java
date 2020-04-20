@@ -23,7 +23,7 @@ public class GameView  extends View {
     int bikerId;
     long lastUpdate;
     public int speed;
-    public int speed2;
+    public int posY;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -38,10 +38,16 @@ public class GameView  extends View {
         try {
             roll = a.getInteger(R.styleable.GameView_roll, 0);
             speed = a.getInteger(R.styleable.GameView_speed, 0);
-            speed2 = a.getInteger(R.styleable.GameView_speed2, 0);
+            posY = a.getInteger(R.styleable.GameView_posY, 0);
         } finally {
             a.recycle();
         }
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+        invalidate();
+        requestLayout();
     }
 
     public void setRoll(int roll) {
@@ -50,18 +56,8 @@ public class GameView  extends View {
         requestLayout();
     }
 
-    public int getRoll() {
-        return roll;
-    }
-
     public void setSpeed(int speed) {
         this.speed = speed;
-        invalidate();
-        requestLayout();
-    }
-
-    public void setSpeed2(int speed2) {
-        this.speed2 = speed2;
         invalidate();
         requestLayout();
     }
@@ -73,7 +69,7 @@ public class GameView  extends View {
         GameRepository.drawRedLines(canvas, this);
         GameRepository.drawRoad(canvas, this);
         GameRepository.drawRoadLines(canvas, this);
-        //GameRepository.drawBiker(canvas, getResources(), this, this.getWidth());
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
 
         invalidate();
     }

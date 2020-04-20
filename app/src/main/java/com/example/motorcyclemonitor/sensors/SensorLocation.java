@@ -103,6 +103,23 @@ public class SensorLocation implements LocationListener {
 
     }
 
+    private void checkSpeedAndAdjustGraphics(float nCurrentSpeed){
+
+        if(nCurrentSpeed == 0){
+            mainActivity.setFrameRate(10000);
+        }else if(nCurrentSpeed > 10 && nCurrentSpeed < 30){
+            mainActivity.setFrameRate(650);
+        }else if (nCurrentSpeed > 30 && nCurrentSpeed < 50){
+            mainActivity.setFrameRate(400);
+        }else if (nCurrentSpeed > 50 && nCurrentSpeed < 80){
+            mainActivity.setFrameRate(250);
+        }else if (nCurrentSpeed > 80 && nCurrentSpeed < 110){
+            mainActivity.setFrameRate(100);
+        }else{
+            mainActivity.setFrameRate(50);
+        }
+    }
+
      private void updateSpeed(CLocation location) {
         // TODO Auto-generated method stub
         float nCurrentSpeed = 0;
@@ -112,7 +129,7 @@ public class SensorLocation implements LocationListener {
             location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
         }
-        Log.d("xxx", String.valueOf(nCurrentSpeed));
+        this.checkSpeedAndAdjustGraphics(nCurrentSpeed);
         txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
 }
