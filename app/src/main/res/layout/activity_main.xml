@@ -156,14 +156,25 @@
 
             <RelativeLayout
                 android:id="@+id/biker_layout"
+                android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/pseudo3dRoad"
+                    android:baselineAlignBottom="false"
+                    android:layout_alignBottom="@id/gameId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <com.example.motorcyclemonitor.views.GameView
                     android:id="@+id/gameId"
+                    android:scaleType="fitXY"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </com.example.motorcyclemonitor.views.GameView>
+
+
 
             </RelativeLayout>
 

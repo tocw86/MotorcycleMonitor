@@ -66,12 +66,12 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawGreenPlane(canvas, this);
-        GameRepository.drawRedLines(canvas, this);
-        GameRepository.drawRoad(canvas, this);
-        GameRepository.drawRoadLighted(canvas, this);
-        GameRepository.drawRoadLines(canvas, this);
-        //GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
+       // GameRepository.drawGreenPlane(canvas, this);
+       // GameRepository.drawRedLines(canvas, this);
+       // GameRepository.drawRoad(canvas, this);
+        //GameRepository.drawRoadLighted(canvas, this);
+        //GameRepository.drawRoadLines(canvas, this);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
 
         invalidate();
     }

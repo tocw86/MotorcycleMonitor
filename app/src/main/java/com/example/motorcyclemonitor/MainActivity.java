@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.motorcyclemonitor.sensors.SensorLocation;
 import com.example.motorcyclemonitor.sensors.SensorRotation;
 import com.example.motorcyclemonitor.views.CircleView;
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
     public int animationJump;
     public int frameRate = 10000;
     public int gameHeight;
+    public ImageView pseudo3dRoad;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -80,8 +82,18 @@ public class MainActivity extends Activity {
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         rootLayout = (View) this.findViewById(R.id.root_layout);
         gameView = (GameView) this.findViewById(R.id.gameId);
+        pseudo3dRoad = (ImageView) this.findViewById(R.id.pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this);
+
+
+        /*load from raw folder*/
+        pseudo3dRoad.setBottom(gameView.getHeight());
+        Glide.with(this).load(R.drawable.road_test).into(pseudo3dRoad);
+
+        gameView.invalidate();
+
+
         gameHeight = gameView.getHeight();
         animationJump = gameView.animationJump;
         Handler h = new Handler();
