@@ -8,25 +8,34 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 
 import com.example.motorcyclemonitor.R;
 import com.example.motorcyclemonitor.views.GameView;
 
 public class GameRepository {
+
+    public static final int darkGreen = Color.rgb(1,103,1);
+    public static final int red = Color.RED;
+    public static final int darkGray = Color.rgb(103, 103, 103);
+    public static final int lightGreen = Color.rgb(0,197,0);
+
 //#676767
     public static void drawGreenPlane(Canvas canvas, GameView gameView) {
         Paint paint = new Paint();
         paint.setStrokeWidth(0);
-        paint.setColor(Color.rgb(1,103,1));
+        paint.setColor(darkGreen);
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
         canvas.drawRect(0,paddingTop, gameView.getWidth(), gameView.getHeight(), paint);
     }
 
-    public static void drawBiker(Canvas canvas, Resources resources, int roll, int width) {
+    public static void drawBiker(Canvas canvas, Resources resources, GameView gameView, int width) {
+        int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
+
         Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker4);
         Matrix matrix = new Matrix();
-        matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
-        matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)), (bitmapOrg.getHeight() /2));
+        matrix.setRotate(gameView.getRoll(), bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
+        matrix.postTranslate(((width / 2) - (bitmapOrg.getWidth() / 2)), (float) (paddingTop - (bitmapOrg.getHeight() * 0.8)));
         canvas.drawBitmap(bitmapOrg, matrix, null);
     }
 
@@ -37,7 +46,7 @@ public class GameRepository {
 
         Paint paint = new Paint();
         paint.setStrokeWidth(20);
-        paint.setColor(Color.RED);
+        paint.setColor(red);
         canvas.drawLine(paddingLeft, paddingTop, 0, gameView.getHeight(), paint);
         canvas.drawLine(paddingRight, paddingTop, gameView.getWidth(), gameView.getHeight(), paint);
 
@@ -51,7 +60,7 @@ public class GameRepository {
 
         Paint paint = new Paint();
         paint.setStrokeWidth(0);
-        paint.setColor(Color.rgb(103, 103, 103));
+        paint.setColor(darkGray);
 
         Path path = new Path();
         path.moveTo(paddingLeft,paddingTop);
@@ -66,12 +75,22 @@ public class GameRepository {
     public static void drawRoadLines(Canvas canvas, GameView gameView) {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
 
-        Paint paint = new Paint();
-        paint.setStrokeWidth(0);
-        paint.setColor(Color.WHITE);
+        Paint linePaint = new Paint();
+        linePaint.setStrokeWidth(0);
+        linePaint.setColor(Color.WHITE);
 
-       // canvas.drawRect(gameView.getWidth() / 2,paddingTop, (gameView.getWidth() / 2) + 100 , gameView.getHeight(), paint);
-        canvas.drawRect(gameView.getWidth() / 2 - 10, (paddingTop + gameView.speed), gameView.getWidth() / 2 + 5 , gameView.getHeight() - (300 - gameView.speed), paint);
+        Paint grassPaint = new Paint();
+        grassPaint.setStrokeWidth(0);
+        grassPaint.setColor(lightGreen);
+
+        //canvas.drawRect(0, (paddingTop + gameView.speed), gameView.getWidth(), (float) (gameView.getHeight() - ((gameView.getHeight() * 0.5)  - gameView.speed)), grassPaint);
+        Log.d("xxx", String.valueOf(gameView.speed));
+        //first
+        canvas.drawRect(gameView.getWidth() / 2 - 16, (paddingTop + gameView.speed), gameView.getWidth() / 2 + 8 , ((paddingTop + 100) + gameView.speed), linePaint);
+        //second
+       // canvas.drawRect(gameView.getWidth() / 2 - 16, (paddingTop + gameView.speed2), gameView.getWidth() / 2 + 8 , ((paddingTop + 100) + gameView.speed2), linePaint);
+
+        // canvas.drawRect(gameView.getWidth() / 2 - 16, (paddingTop + 220 + gameView.speed), gameView.getWidth() / 2 + 8 , ((paddingTop + 320) + gameView.speed), linePaint);
 
     }
 }

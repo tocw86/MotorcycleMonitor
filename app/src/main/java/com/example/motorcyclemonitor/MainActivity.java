@@ -28,7 +28,9 @@ public class MainActivity extends Activity {
     public TextView gpsStatus;
     public  View rootLayout;
     private Handler frame = new Handler();
-    private static final int FRAME_RATE = 150;
+    public GameView gameView;
+    public int animationJump = 40;
+    private static final int FRAME_RATE = 500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class MainActivity extends Activity {
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         rootLayout = (View) this.findViewById(R.id.root_layout);
-        GameView gameView = (GameView) this.findViewById(R.id.gameId);
+        gameView = (GameView) this.findViewById(R.id.gameId);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this);
         Handler h = new Handler();
@@ -78,15 +80,23 @@ public class MainActivity extends Activity {
             //make any updates to on screen objects here
 
             //then invoke the on draw by invalidating the canvas
-            int newSpeed = ((GameView)findViewById(R.id.gameId)).speed;
+            int newSpeed = gameView.speed;
+            int newSpeed2 = gameView.speed2;
+            int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
 
-            if(newSpeed >= ((GameView)findViewById(R.id.gameId)).getHeight()){
-                ((GameView)findViewById(R.id.gameId)).setSpeed(100);
+            if(newSpeed > 120 || newSpeed2 > animationJump){
+                gameView.setSpeed2(newSpeed2 + animationJump);
             }else{
-                ((GameView)findViewById(R.id.gameId)).setSpeed(newSpeed + 100);
+                gameView.setSpeed2(animationJump);
+            }
+
+            if((newSpeed + paddingTop) >= gameView.getHeight()){
+                gameView.setSpeed(animationJump);
+            }else{
+                gameView.setSpeed(newSpeed + animationJump);
 
             }
-            ((GameView)findViewById(R.id.gameId)).invalidate();
+            gameView.invalidate();
 
             frame.postDelayed(frameUpdate, FRAME_RATE);
 

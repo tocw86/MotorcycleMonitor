@@ -23,6 +23,7 @@ public class GameView  extends View {
     int bikerId;
     long lastUpdate;
     public int speed;
+    public int speed2;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -32,11 +33,12 @@ public class GameView  extends View {
         paint.setStrokeWidth(20);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                R.styleable.CircleView,
+                R.styleable.GameView,
                 0, 0);
         try {
             roll = a.getInteger(R.styleable.GameView_roll, 0);
-            speed = a.getInteger(R.styleable.GameView_speed, 100);
+            speed = a.getInteger(R.styleable.GameView_speed, 0);
+            speed2 = a.getInteger(R.styleable.GameView_speed2, 0);
         } finally {
             a.recycle();
         }
@@ -48,8 +50,18 @@ public class GameView  extends View {
         requestLayout();
     }
 
+    public int getRoll() {
+        return roll;
+    }
+
     public void setSpeed(int speed) {
         this.speed = speed;
+        invalidate();
+        requestLayout();
+    }
+
+    public void setSpeed2(int speed2) {
+        this.speed2 = speed2;
         invalidate();
         requestLayout();
     }
@@ -61,7 +73,7 @@ public class GameView  extends View {
         GameRepository.drawRedLines(canvas, this);
         GameRepository.drawRoad(canvas, this);
         GameRepository.drawRoadLines(canvas, this);
-        GameRepository.drawBiker(canvas, getResources(), this.roll, this.getWidth());
+        //GameRepository.drawBiker(canvas, getResources(), this, this.getWidth());
 
         invalidate();
     }

@@ -7,5 +7,6 @@
     <declare-styleable name="GameView">
         <attr name="roll" format="integer" />
         <attr name="speed" format="integer"/>
+        <attr name="speed2" format="integer"/>
     </declare-styleable>
 </resources>
