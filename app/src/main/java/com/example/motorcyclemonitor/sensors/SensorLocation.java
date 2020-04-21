@@ -29,17 +29,12 @@ public class SensorLocation implements LocationListener {
     public MainActivity mainActivity;
     public LocationManager locationManager;
     public TextView txtGpsStatus;
-    public TextView txtLat;
-    public TextView txtLng;
     public TextView txtCurrentSpeed;
     public GpsListener gpsStatus;
     public  ImageView pseudo3dRoad;
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
-        txtGpsStatus = (TextView) mainActivity.findViewById(R.id.txtGpsStatus);
-        txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
-        txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
         txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
         this.pseudo3dRoad = pseudo3dRoad;
 
@@ -63,7 +58,7 @@ public class SensorLocation implements LocationListener {
             this.onLocationChanged(null);
         }
 
-        if (locationManager != null) {
+   /*     if (locationManager != null) {
             Location lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastKnownLocationGPS != null) {
                 txtLat.setText(String.valueOf(lastKnownLocationGPS.getLatitude()));
@@ -76,7 +71,7 @@ public class SensorLocation implements LocationListener {
                }
             }
         } else {
-        }
+        }*/
     }
 
     @Override
@@ -86,8 +81,6 @@ public class SensorLocation implements LocationListener {
 
         if(location != null){
             CLocation myLocation = new CLocation(location, true);
-             txtLat.setText(String.valueOf(location.getLatitude()));
-            txtLng.setText(String.valueOf(location.getLongitude()));
             this.updateSpeed(myLocation);
         }
     }

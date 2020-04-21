@@ -11,6 +11,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/bg_daylight"
                 android:src="@drawable/daylight"
@@ -31,6 +32,16 @@
             android:src="@drawable/cloud1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/gpsStatusView"
+            android:src="@drawable/gps_status_circle_red"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp">
+        </ImageView>
+
         <RelativeLayout
             android:id="@+id/game_relative"
             android:layout_width="match_parent"
@@ -47,22 +58,19 @@
                 android:layout_height="wrap_content"
                 android:descendantFocusability="afterDescendants"
                 android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingTop="0dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="0dp">
+                >
                 <GridLayout
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_height="match_parent">
+                    android:layout_marginTop="-30dp"
+                    android:layout_height="wrap_content">
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/txtCurrentSpeed"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="0"
                         android:textColor="@color/black"
                         android:fontFamily="@font/anton"
-                        android:textSize="60dp" />
+                        android:textSize="120sp" />
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
@@ -81,13 +89,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/row1"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="-20dp"
                 android:descendantFocusability="afterDescendants"
                 android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingTop="0dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="0dp"
                 >
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -99,7 +103,6 @@
                     android:fontFamily="@font/anton"
                     android:textAlignment="center"
                     android:textSize="30dp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -110,70 +113,8 @@
                 android:layout_marginTop="0dp"
                 android:descendantFocusability="afterDescendants"
                 android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingTop="0dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="0dp">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtGpsStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/anton"
-                    android:textSize="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/row4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/row3"
-                android:layout_marginTop="0dp"
-                android:descendantFocusability="afterDescendants"
-                android:orientation="vertical"
-                android:paddingLeft="15dp"
-                android:paddingTop="4dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="4dp">
-
-                <Button
-                    android:layout_width="202dp"
-                    android:layout_height="1dp"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/anton"
-                    android:onClick="calibrateSensors"
-                    android:text="Calibrate"
-                    android:visibility="invisible" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtLat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textAlignment="center"
-                    android:textSize="10dp" />
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtLng"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textAlignment="center"
-                    android:textSize="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/row5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/row4"
-                android:layout_marginTop="0dp"
-                android:descendantFocusability="afterDescendants"
-                android:orientation="vertical"
                 android:paddingLeft="0dp"
-                android:paddingTop="4dp"
+                android:paddingTop="0dp"
                 android:paddingRight="0dp"
                 android:paddingBottom="0dp">
 

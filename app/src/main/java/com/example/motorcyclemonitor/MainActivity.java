@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
     public ImageView bgDaylight;
     public ImageView cloud3View;
     public ImageView cloud1View;
+    public ImageView gpsStatusView;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -88,8 +89,6 @@ public class MainActivity extends Activity {
     }
 
     public void startApp(){
-        gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
-        gpsStatus = (TextView) this.findViewById(R.id.txtGpsStatus);
         rootLayout = (View) this.findViewById(R.id.root_layout);
         gameView = (GameView) this.findViewById(R.id.gameId);
         pseudo3dRoad = (ImageView) this.findViewById(R.id.pseudo3dRoad);
@@ -116,7 +115,7 @@ public class MainActivity extends Activity {
                     cloud3View.setVisibility(View.VISIBLE);
                 }
                 if(cloud1View.getPaddingTop() == 0){
-                    cloud1View.setPadding(-25, 50, 0, 0);
+                    cloud1View.setPadding(-25, 140, 0, 0);
                     cloud1View.setVisibility(View.VISIBLE);
                 }
                 initGfx();
