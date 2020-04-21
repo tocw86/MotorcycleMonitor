@@ -5,184 +5,209 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main_bg"
     android:id="@+id/root_layout"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="beforeDescendants"
-        android:paddingLeft="0dp"
-        android:paddingTop="0dp"
-        android:paddingRight="0dp"
-        android:paddingBottom="0dp">
-
-        <LinearLayout
-            android:id="@+id/row1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingTop="0dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="0dp">
-            <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/bg_daylight"
+                android:src="@drawable/daylight"
+                android:scaleType="fitXY"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_height="match_parent">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtCurrentSpeed"
+                android:layout_height="wrap_content">
+            </ImageView>
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/cloud3"
+            android:src="@drawable/cloud3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/cloud1"
+            android:src="@drawable/cloud1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:id="@+id/game_relative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp">
+
+            <LinearLayout
+                android:id="@+id/row1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="afterDescendants"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="0dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="0dp">
+                <GridLayout
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="match_parent">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txtCurrentSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/anton"
+                        android:textSize="60dp" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="KM/H"
+                        android:fontFamily="@font/anton"
+                        android:textSize="20dp" />
+
+                </GridLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/row1"
+                android:layout_marginTop="0dp"
+                android:descendantFocusability="afterDescendants"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="0dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="0dp"
+                >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtRoll"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/black"
                     android:fontFamily="@font/anton"
-                    android:textSize="60dp" />
+                    android:textAlignment="center"
+                    android:textSize="30dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/row2"
+                android:layout_marginTop="0dp"
+                android:descendantFocusability="afterDescendants"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="0dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="0dp">
+
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/txtGpsStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/anton"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/row3"
+                android:layout_marginTop="0dp"
+                android:descendantFocusability="afterDescendants"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="4dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="4dp">
+
+                <Button
+                    android:layout_width="202dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/anton"
+                    android:onClick="calibrateSensors"
+                    android:text="Calibrate"
+                    android:visibility="invisible" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtLat"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="KM/H"
-                    android:fontFamily="@font/anton"
-                    android:textSize="20dp" />
-
-            </GridLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/row1"
-            android:layout_marginTop="0dp"
-            android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingTop="0dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="0dp"
-            >
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtRoll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/black"
-                android:fontFamily="@font/anton"
-                android:textAlignment="center"
-                android:textSize="30dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/row2"
-            android:layout_marginTop="0dp"
-            android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingTop="0dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="0dp">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtGpsStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:fontFamily="@font/anton"
-                android:textSize="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/row3"
-            android:layout_marginTop="0dp"
-            android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingTop="4dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="4dp">
-
-            <Button
-                android:layout_width="202dp"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:fontFamily="@font/anton"
-                android:onClick="calibrateSensors"
-                android:text="Calibrate"
-                android:visibility="invisible" />
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtLat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="10dp" />
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtLng"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/row4"
-            android:layout_marginTop="0dp"
-            android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingLeft="0dp"
-            android:paddingTop="4dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp">
-
-            <RelativeLayout
-                android:id="@+id/biker_layout"
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/pseudo3dRoad"
-                    android:baselineAlignBottom="false"
-                    android:layout_alignBottom="@id/gameId"
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtLng"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
 
-                <com.example.motorcyclemonitor.views.GameView
-                    android:id="@+id/gameId"
-                    android:scaleType="fitXY"
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/row4"
+                android:layout_marginTop="0dp"
+                android:descendantFocusability="afterDescendants"
+                android:orientation="vertical"
+                android:paddingLeft="0dp"
+                android:paddingTop="4dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp">
+
+                <RelativeLayout
+                    android:id="@+id/biker_layout"
+                    android:layout_gravity="bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </com.example.motorcyclemonitor.views.GameView>
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/pseudo3dRoad"
+                        android:baselineAlignBottom="false"
+                        android:layout_alignBottom="@id/gameId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.example.motorcyclemonitor.views.GameView
+                        android:id="@+id/gameId"
+                        android:scaleType="fitXY"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </com.example.motorcyclemonitor.views.GameView>
 
 
 
-            </RelativeLayout>
+                </RelativeLayout>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
+
+        </RelativeLayout>
 
     </RelativeLayout>
-    <include layout="@layout/cirlce_layout" android:visibility="invisible"/>
+
 
 </LinearLayout>

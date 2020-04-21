@@ -9,10 +9,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.motorcyclemonitor.listeners.GpsListener;
 import com.example.motorcyclemonitor.models.CLocation;
 import com.example.motorcyclemonitor.MainActivity;
@@ -31,13 +33,15 @@ public class SensorLocation implements LocationListener {
     public TextView txtLng;
     public TextView txtCurrentSpeed;
     public GpsListener gpsStatus;
-    public SensorLocation(MainActivity context) {
+    public  ImageView pseudo3dRoad;
+    public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
         txtGpsStatus = (TextView) mainActivity.findViewById(R.id.txtGpsStatus);
         txtLat = (TextView) mainActivity.findViewById(R.id.txtLat);
         txtLng = (TextView) mainActivity.findViewById(R.id.txtLng);
         txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
+        this.pseudo3dRoad = pseudo3dRoad;
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -104,19 +108,20 @@ public class SensorLocation implements LocationListener {
 
     private void checkSpeedAndAdjustGraphics(float nCurrentSpeed){
 
-        if(nCurrentSpeed == 0){
-            mainActivity.setFrameRate(10000);
-        }else if(nCurrentSpeed > 10 && nCurrentSpeed < 30){
-            mainActivity.setFrameRate(500);
-        }else if (nCurrentSpeed > 30 && nCurrentSpeed < 50){
-            mainActivity.setFrameRate(300);
-        }else if (nCurrentSpeed > 50 && nCurrentSpeed < 80){
-            mainActivity.setFrameRate(120);
-        }else if (nCurrentSpeed > 80 && nCurrentSpeed < 110){
-            mainActivity.setFrameRate(70);
-        }else{
-            mainActivity.setFrameRate(50);
-        }
+       if(nCurrentSpeed == 0){
+            Glide.with(mainActivity).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 10 && nCurrentSpeed <= 25){
+            Glide.with(mainActivity).load(R.drawable.road_pixelized_25).into(pseudo3dRoad);
+        }else if (nCurrentSpeed > 25 && nCurrentSpeed <= 50){
+            Glide.with(mainActivity).load(R.drawable.road_pixelized_50).into(pseudo3dRoad);
+        }else if (nCurrentSpeed > 50 && nCurrentSpeed <= 75){
+            Glide.with(mainActivity).load(R.drawable.road_pixelized_75).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 75 && nCurrentSpeed <= 100){
+            Glide.with(mainActivity).load(R.drawable.road_pixelized_100).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 100){
+           Glide.with(mainActivity).load(R.drawable.road_pixelized_150).into(pseudo3dRoad);
+       }
+
     }
 
      private void updateSpeed(CLocation location) {
@@ -130,6 +135,6 @@ public class SensorLocation implements LocationListener {
         }
         this.checkSpeedAndAdjustGraphics(nCurrentSpeed);
         this.mainActivity.gameView.setSpeed((int) nCurrentSpeed);
-        txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
+        this.txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
 }

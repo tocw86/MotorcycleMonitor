@@ -37,14 +37,12 @@ public class GameRepository {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
         Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker5);
         Matrix matrix = new Matrix();
-        roll = 0;
         if(roll > 7 || roll < -7){
             matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
         }else{
             matrix.setRotate(0, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
         }
         if(gameView.speed > 20){
-
             Random rand = new Random();
             int randX = rand.nextInt(5);
             rand = new Random();
@@ -161,6 +159,12 @@ public class GameRepository {
         }else{
             canvas.drawRect(0, (paddingTop + gameView.posY), gameView.getWidth() , ((paddingTop + (gameView.animationJump * 2)) + gameView.posY), linePaint);
         }
+
+    }
+
+    public static void drawClouds(Canvas canvas, Resources resources, GameView gameView) {
+        Bitmap cloud3 = BitmapFactory.decodeResource(resources, R.drawable.cloud3);
+        canvas.drawBitmap(cloud3, 100f, 100f, null);
 
     }
 }

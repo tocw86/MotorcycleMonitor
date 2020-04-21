@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -66,13 +67,8 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-       // GameRepository.drawGreenPlane(canvas, this);
-       // GameRepository.drawRedLines(canvas, this);
-       // GameRepository.drawRoad(canvas, this);
-        //GameRepository.drawRoadLighted(canvas, this);
-        //GameRepository.drawRoadLines(canvas, this);
+        Log.d("xxx", "69");
         GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
-
         invalidate();
     }
 

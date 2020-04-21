@@ -19,14 +19,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.motorcyclemonitor.sensors.SensorLocation;
 import com.example.motorcyclemonitor.sensors.SensorRotation;
 import com.example.motorcyclemonitor.views.CircleView;
 import com.example.motorcyclemonitor.views.GameView;
+
+import java.util.Random;
 
 import io.sentry.core.Sentry;
 
@@ -41,6 +48,9 @@ public class MainActivity extends Activity {
     public int frameRate = 10000;
     public int gameHeight;
     public ImageView pseudo3dRoad;
+    public ImageView bgDaylight;
+    public ImageView cloud3View;
+    public ImageView cloud1View;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -84,30 +94,33 @@ public class MainActivity extends Activity {
         gameView = (GameView) this.findViewById(R.id.gameId);
         pseudo3dRoad = (ImageView) this.findViewById(R.id.pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
-        sensorLocation = new SensorLocation(this);
-
-
+        sensorLocation = new SensorLocation(this, pseudo3dRoad);
+        cloud3View = (ImageView) this.findViewById(R.id.cloud3);
+        cloud1View = (ImageView) this.findViewById(R.id.cloud1);
+        bgDaylight = (ImageView) this.findViewById(R.id.bg_daylight);
         /*load from raw folder*/
         pseudo3dRoad.setBottom(gameView.getHeight());
-        Glide.with(this).load(R.drawable.road_test).into(pseudo3dRoad);
-
-        gameView.invalidate();
-
-
+        Glide.with(this).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
         gameHeight = gameView.getHeight();
         animationJump = gameView.animationJump;
         Handler h = new Handler();
-
-        h.postDelayed(new Runnable() {
-
+        bgDaylight = (ImageView) this.findViewById(R.id.bg_daylight);
+         h.postDelayed(new Runnable() {
             @Override
-
             public void run() {
-
+                if(bgDaylight.getPaddingBottom() == 0){
+                    bgDaylight.setPadding(0,0,0,pseudo3dRoad.getHeight());
+                }
+                if(cloud3View.getPaddingTop() == 0){
+                    cloud3View.setPadding((int) (gameView.getWidth() * 0.7), gameView.getHeight() / 3, 0, 0);
+                    cloud3View.setVisibility(View.VISIBLE);
+                }
+                if(cloud1View.getPaddingTop() == 0){
+                    cloud1View.setPadding(-25, 50, 0, 0);
+                    cloud1View.setVisibility(View.VISIBLE);
+                }
                 initGfx();
-
             }
-
         }, 1000);
     }
 
@@ -123,6 +136,7 @@ public class MainActivity extends Activity {
         //It's a good idea to remove any existing callbacks to keep
 
         //them from inadvertently stacking up.
+
 
         frame.removeCallbacks(frameUpdate);
 
@@ -153,9 +167,7 @@ public class MainActivity extends Activity {
 
             }
             gameView.invalidate();
-
             frame.postDelayed(frameUpdate, frameRate);
-
         }
 
     };
