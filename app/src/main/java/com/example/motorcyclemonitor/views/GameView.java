@@ -25,7 +25,6 @@ public class GameView  extends View {
     long lastUpdate;
     public int speed;
     public int posY;
-    public int animationJump = 60;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -67,7 +66,6 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d("xxx", "69");
         GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
         invalidate();
     }

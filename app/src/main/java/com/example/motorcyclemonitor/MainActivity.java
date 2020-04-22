@@ -3,55 +3,43 @@ package com.example.motorcyclemonitor;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+
+import com.example.motorcyclemonitor.animations.CloudAnimation;
 import com.example.motorcyclemonitor.sensors.SensorLocation;
 import com.example.motorcyclemonitor.sensors.SensorRotation;
-import com.example.motorcyclemonitor.views.CircleView;
 import com.example.motorcyclemonitor.views.GameView;
-
-import java.util.Random;
-
-import io.sentry.core.Sentry;
 
 public class MainActivity extends Activity {
     public SensorRotation sensorRotation;
     public SensorLocation sensorLocation;
-    public TextView gpsStatus;
     public View rootLayout;
-    private Handler frame = new Handler();
     public GameView gameView;
-    public int animationJump;
-    public int frameRate = 10000;
     public int gameHeight;
     public ImageView pseudo3dRoad;
     public ImageView bgDaylight;
     public ImageView cloud3View;
     public ImageView cloud1View;
-    public ImageView gpsStatusView;
+    int cloud3PosY;
+    int cloud3PosX;
+
+    int cloud1PosY;
+    int cloud1PosX;
+
+    public CloudAnimation cloud1Animation;
+    public CloudAnimation cloud2Animation;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
@@ -61,22 +49,24 @@ public class MainActivity extends Activity {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_BACKGROUND_LOCATION
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
-        if(Integer.valueOf(android.os.Build.VERSION.SDK_INT) > 22){
+        if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) > 22) {
             if (!hasPermissions(this, PERMISSIONS)) {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-            }else{
+            } else {
                 startApp();
             }
-        }else{
+        } else {
             startApp();
         }
     }
+
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
@@ -88,39 +78,23 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    public void startApp(){
-        rootLayout = (View) this.findViewById(R.id.root_layout);
-        gameView = (GameView) this.findViewById(R.id.gameId);
-        pseudo3dRoad = (ImageView) this.findViewById(R.id.pseudo3dRoad);
+    public void startApp() {
+        rootLayout = this.findViewById(R.id.root_layout);
+        gameView = this.findViewById(R.id.gameId);
+        pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this, pseudo3dRoad);
-        cloud3View = (ImageView) this.findViewById(R.id.cloud3);
-        cloud1View = (ImageView) this.findViewById(R.id.cloud1);
-        bgDaylight = (ImageView) this.findViewById(R.id.bg_daylight);
+        cloud3View = this.findViewById(R.id.cloud3);
+        cloud1View = this.findViewById(R.id.cloud1);
+        bgDaylight = this.findViewById(R.id.bg_daylight);
         /*load from raw folder*/
         pseudo3dRoad.setBottom(gameView.getHeight());
         Glide.with(this).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
         gameHeight = gameView.getHeight();
-        animationJump = gameView.animationJump;
-        Handler h = new Handler();
-        bgDaylight = (ImageView) this.findViewById(R.id.bg_daylight);
-         h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(bgDaylight.getPaddingBottom() == 0){
-                    bgDaylight.setPadding(0,0,0,pseudo3dRoad.getHeight());
-                }
-                if(cloud3View.getPaddingTop() == 0){
-                    cloud3View.setPadding((int) (gameView.getWidth() * 0.7), gameView.getHeight() / 3, 0, 0);
-                    cloud3View.setVisibility(View.VISIBLE);
-                }
-                if(cloud1View.getPaddingTop() == 0){
-                    cloud1View.setPadding(-25, 140, 0, 0);
-                    cloud1View.setVisibility(View.VISIBLE);
-                }
-                initGfx();
-            }
-        }, 1000);
+        cloud1Animation = new CloudAnimation(cloud1View, 4000);
+        cloud2Animation = new CloudAnimation(cloud3View, 3000);
+        bgDaylight = this.findViewById(R.id.bg_daylight);
+        startGfx(new Handler());
     }
 
     @Override
@@ -129,51 +103,42 @@ public class MainActivity extends Activity {
         startApp();
     }
 
-    synchronized public void initGfx() {
+    public void startGfx(Handler h) {
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (bgDaylight.getPaddingBottom() == 0) {
+                    bgDaylight.setPadding(0, 0, 0, pseudo3dRoad.getHeight());
+                }
+                if (cloud3View.getPaddingTop() == 0) {
+                    cloud3PosY = gameView.getHeight() / 3;
+                    cloud3PosX = (int) (gameView.getWidth() * 0.7);
+                    cloud3View.setPadding(cloud3PosX, cloud3PosY, 0, 0);
+                    cloud3View.setVisibility(View.VISIBLE);
 
+                    cloud2Animation.setLeft(cloud3PosX);
+                    cloud2Animation.setTop(cloud3PosY);
+                    cloud2Animation.setPosYChange(10);
+                    cloud2Animation.start();
 
-        //It's a good idea to remove any existing callbacks to keep
+                }
+                if (cloud1View.getPaddingTop() == 0) {
+                    cloud1PosY = 140;
+                    cloud1PosX = -25;
+                    cloud1View.setPadding(cloud1PosX, cloud1PosY, 0, 0);
+                    cloud1View.setVisibility(View.VISIBLE);
 
-        //them from inadvertently stacking up.
+                    cloud1Animation.setLeft(cloud1PosX);
+                    cloud1Animation.setTop(cloud1PosY);
+                    cloud1Animation.setPosYChange(5);
+                    cloud1Animation.start();
 
-
-        frame.removeCallbacks(frameUpdate);
-
-        frame.postDelayed(frameUpdate, frameRate);
-
-    }
-
-
-    private Runnable frameUpdate = new Runnable() {
-
-        @Override
-
-        synchronized public void run() {
-
-            frame.removeCallbacks(frameUpdate);
-
-            //make any updates to on screen objects here
-
-            //then invoke the on draw by invalidating the canvas
-            int newPosY = gameView.posY;
-            int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
-
-
-            if ((newPosY + paddingTop) >= gameView.getHeight()) {
-                gameView.setPosY(animationJump);
-            } else {
-                gameView.setPosY(newPosY + animationJump);
-
+                }
             }
-            gameView.invalidate();
-            frame.postDelayed(frameUpdate, frameRate);
-        }
+        }, 1000);
 
-    };
-
-    public void setFrameRate(int frameRate) {
-        this.frameRate = frameRate;
     }
+
 
     public void finish() {
         super.finish();
@@ -183,4 +148,4 @@ public class MainActivity extends Activity {
     public void calibrateSensors(View view) {
         sensorRotation.calibrateSensors();
     }
- }
+}

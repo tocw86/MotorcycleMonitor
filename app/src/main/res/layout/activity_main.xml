@@ -89,20 +89,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/row1"
-                android:layout_marginTop="-20dp"
+                android:layout_marginTop="-30dp"
                 android:descendantFocusability="afterDescendants"
                 android:orientation="vertical"
                 >
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+        android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/angle"
+            android:textSize="20dp"
+            android:layout_marginRight="5dp"
+            />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtRoll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/anton"
-                    android:textAlignment="center"
-                    android:textSize="30dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtRoll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0"
+            android:textColor="@color/black"
+            android:fontFamily="@font/anton"
+            android:textSize="30sp" />
+    </GridLayout>
+
             </LinearLayout>
 
             <LinearLayout

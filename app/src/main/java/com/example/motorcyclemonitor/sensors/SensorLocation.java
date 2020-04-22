@@ -87,7 +87,6 @@ public class SensorLocation implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        txtGpsStatus.setText(String.valueOf(status));
     }
 
     @Override
