@@ -91,7 +91,7 @@ public class SensorRotation implements SensorEventListener {
                     }
                     mags = null;
                     accels = null;
-                    txtRoll.setText(String.valueOf(roll));
+                    txtRoll.setText(this.parseRoll(roll));
                     gameView.setRoll((int) roll);
                     lastUpdate = actualTime;
                 }
@@ -101,6 +101,21 @@ public class SensorRotation implements SensorEventListener {
         }
 
     }
+
+    private String parseRoll(float roll) {
+        String side;
+        int tmpRoll = (int) roll;
+        if(tmpRoll == 0){
+            side = "";
+        } else if(tmpRoll < 0){
+            side = "L";
+            tmpRoll = tmpRoll * -1;
+        }else{
+            side = "R";
+        }
+       return String.valueOf(tmpRoll) + "°" + " " + side;
+    }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -120,4 +135,5 @@ public class SensorRotation implements SensorEventListener {
         }
         return output;
     }
+
 }
