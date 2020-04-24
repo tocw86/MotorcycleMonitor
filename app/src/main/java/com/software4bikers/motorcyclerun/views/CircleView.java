@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.views;
+package com.software4bikers.motorcyclerun.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,7 +11,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.example.motorcyclemonitor.R;
+import com.software4bikers.motorcyclerun.R;
 
 public class CircleView extends View
 {

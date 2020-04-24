@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor;
+package com.software4bikers.motorcyclerun;
 
 import org.junit.Test;
 

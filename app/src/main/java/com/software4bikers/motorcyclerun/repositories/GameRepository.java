@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.repositories;
+package com.software4bikers.motorcyclerun.repositories;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,8 +10,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
 
-import com.example.motorcyclemonitor.R;
-import com.example.motorcyclemonitor.views.GameView;
+import com.software4bikers.motorcyclerun.R;
+import com.software4bikers.motorcyclerun.views.GameView;
 
 import java.util.Random;
 

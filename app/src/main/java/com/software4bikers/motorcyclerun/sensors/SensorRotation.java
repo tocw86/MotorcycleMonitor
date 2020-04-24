@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.sensors;
+package com.software4bikers.motorcyclerun.sensors;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.motorcyclemonitor.MainActivity;
-import com.example.motorcyclemonitor.R;
-import com.example.motorcyclemonitor.views.GameView;
+import com.software4bikers.motorcyclerun.MainActivity;
+import com.software4bikers.motorcyclerun.R;
+import com.software4bikers.motorcyclerun.views.GameView;
 
 public class SensorRotation implements SensorEventListener {
     static final float ALPHA = 0.25f;
@@ -91,8 +91,8 @@ public class SensorRotation implements SensorEventListener {
                     }
                     mags = null;
                     accels = null;
-                    txtRoll.setText(this.parseRoll(roll));
                     gameView.setRoll((int) roll);
+                    txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
                     lastUpdate = actualTime;
                 }
 

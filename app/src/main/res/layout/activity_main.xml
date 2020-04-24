@@ -144,12 +144,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                    <com.example.motorcyclemonitor.views.GameView
+                    <com.software4bikers.motorcyclerun.views.GameView
                         android:id="@+id/gameId"
                         android:scaleType="fitXY"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                    </com.example.motorcyclemonitor.views.GameView>
+                    </com.software4bikers.motorcyclerun.views.GameView>
 
 
 

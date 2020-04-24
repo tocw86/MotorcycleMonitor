@@ -1,12 +1,12 @@
-package com.example.motorcyclemonitor.listeners;
+package com.software4bikers.motorcyclerun.listeners;
 
 import android.location.GpsStatus;
 import android.media.Image;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.motorcyclemonitor.MainActivity;
-import com.example.motorcyclemonitor.R;
+import com.software4bikers.motorcyclerun.MainActivity;
+import com.software4bikers.motorcyclerun.R;
 
 public class GpsListener implements GpsStatus.Listener {
     public MainActivity mainActivity;

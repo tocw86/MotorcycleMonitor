@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.sensors;
+package com.software4bikers.motorcyclerun.sensors;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,10 +15,10 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.motorcyclemonitor.listeners.GpsListener;
-import com.example.motorcyclemonitor.models.CLocation;
-import com.example.motorcyclemonitor.MainActivity;
-import com.example.motorcyclemonitor.R;
+import com.software4bikers.motorcyclerun.listeners.GpsListener;
+import com.software4bikers.motorcyclerun.models.CLocation;
+import com.software4bikers.motorcyclerun.MainActivity;
+import com.software4bikers.motorcyclerun.R;
 
 import java.util.Formatter;
 import java.util.List;

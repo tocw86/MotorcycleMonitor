@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor;
+package com.software4bikers.motorcyclerun;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.motorcyclemonitor", appContext.getPackageName());
+        assertEquals("com.software4bikers.motorcyclerun", appContext.getPackageName());
     }
 }

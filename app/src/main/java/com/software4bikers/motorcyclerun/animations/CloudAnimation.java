@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.animations;
+package com.software4bikers.motorcyclerun.animations;
 
 import android.os.Handler;
 import android.widget.ImageView;

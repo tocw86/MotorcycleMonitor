@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor.views;
+package com.software4bikers.motorcyclerun.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,14 +8,19 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.example.motorcyclemonitor.R;
-import com.example.motorcyclemonitor.repositories.GameRepository;
+import com.software4bikers.motorcyclerun.R;
+import com.software4bikers.motorcyclerun.repositories.GameRepository;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GameView  extends View {
     Paint paint = null;
@@ -25,10 +30,14 @@ public class GameView  extends View {
     long lastUpdate;
     public int speed;
     public int posY;
+    public int maximumRoll = 0;
+    public List<Integer> rollArray;
+    private Handler frame = new Handler();
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         lastUpdate = System.currentTimeMillis();
+        rollArray = new ArrayList<Integer>();
         paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(20);
@@ -43,6 +52,19 @@ public class GameView  extends View {
         } finally {
             a.recycle();
         }
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initGfx();
+            }
+        },1000);
+    }
+
+    public int getMaximumRoll() {
+        return maximumRoll;
     }
 
     public void setPosY(int posY) {
@@ -53,6 +75,7 @@ public class GameView  extends View {
 
     public void setRoll(int roll) {
         this.roll = roll;
+        rollArray.add(roll);
         invalidate();
         requestLayout();
     }
@@ -66,8 +89,24 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
         invalidate();
     }
+    synchronized private void initGfx() {
 
+        frame.removeCallbacks(frameUpdate);
+        frame.postDelayed(frameUpdate, 1000);
+
+    }
+
+    private Runnable frameUpdate = new Runnable() {
+
+        @Override
+        synchronized public void run() {
+            frame.removeCallbacks(frameUpdate);
+            maximumRoll = Collections.max(rollArray);
+            rollArray = new ArrayList<Integer>();
+            frame.postDelayed(frameUpdate, 1000);
+        }
+    };
 }

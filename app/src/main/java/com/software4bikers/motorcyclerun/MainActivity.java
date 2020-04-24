@@ -1,4 +1,4 @@
-package com.example.motorcyclemonitor;
+package com.software4bikers.motorcyclerun;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,10 +17,10 @@ import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 
-import com.example.motorcyclemonitor.animations.CloudAnimation;
-import com.example.motorcyclemonitor.sensors.SensorLocation;
-import com.example.motorcyclemonitor.sensors.SensorRotation;
-import com.example.motorcyclemonitor.views.GameView;
+import com.software4bikers.motorcyclerun.animations.CloudAnimation;
+import com.software4bikers.motorcyclerun.sensors.SensorLocation;
+import com.software4bikers.motorcyclerun.sensors.SensorRotation;
+import com.software4bikers.motorcyclerun.views.GameView;
 
 public class MainActivity extends Activity {
     public SensorRotation sensorRotation;
