@@ -58,7 +58,7 @@ public class GameView  extends View {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initGfx();
+                calculateRoll();
             }
         },1000);
     }
@@ -92,7 +92,7 @@ public class GameView  extends View {
         GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
         invalidate();
     }
-    synchronized private void initGfx() {
+    synchronized private void calculateRoll() {
 
         frame.removeCallbacks(frameUpdate);
         frame.postDelayed(frameUpdate, 1000);
@@ -104,7 +104,19 @@ public class GameView  extends View {
         @Override
         synchronized public void run() {
             frame.removeCallbacks(frameUpdate);
-            maximumRoll = Collections.max(rollArray);
+            int max = Collections.max(rollArray);
+            int min = Collections.min(rollArray);
+
+            if(min < 0){
+                min = min * -1;
+            }
+
+            if(min >= max){
+                maximumRoll =  min * -1;
+            }else{
+                maximumRoll = max;
+            }
+
             rollArray = new ArrayList<Integer>();
             frame.postDelayed(frameUpdate, 1000);
         }
