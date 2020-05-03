@@ -41,7 +41,6 @@ public class SensorRotation implements SensorEventListener {
     public GameView gameView;
     public ImageView imageView;
     public View bikerView;
-    public TextView gravityText;
     private float[] gravityRaw = new float[3];
     private float[] linearAcceleration = new float[3];
 
@@ -50,7 +49,6 @@ public class SensorRotation implements SensorEventListener {
         this.gameView = gameView;
         context = mainActivity;
         calibrateRollValue = 0;
-        gravityText = (TextView) context.findViewById(R.id.txtGravity);
         bikerView = (View) context.findViewById(R.id.biker_layout);
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
         Resources res = context.getResources();
