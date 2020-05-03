@@ -42,6 +42,13 @@
             android:layout_height="30dp">
         </ImageView>
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/weather_icon"
+            android:layout_width="100dp"
+            android:layout_marginLeft="0dp"
+            android:layout_height="100dp"/>
+
         <RelativeLayout
             android:id="@+id/game_relative"
             android:layout_width="match_parent"
@@ -111,6 +118,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="0"
+            android:textColor="@color/black"
+            android:fontFamily="@font/anton"
+            android:textSize="30sp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/txtGravity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0"
+            android:layout_marginLeft="15dp"
             android:textColor="@color/black"
             android:fontFamily="@font/anton"
             android:textSize="30sp" />

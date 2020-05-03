@@ -41,11 +41,16 @@ public class SensorRotation implements SensorEventListener {
     public GameView gameView;
     public ImageView imageView;
     public View bikerView;
+    public TextView gravityText;
+    private float[] gravityRaw = new float[3];
+    private float[] linearAcceleration = new float[3];
+
     public SensorRotation(MainActivity mainActivity, GameView gameView) {
         lastUpdate = System.currentTimeMillis();
         this.gameView = gameView;
         context = mainActivity;
         calibrateRollValue = 0;
+        gravityText = (TextView) context.findViewById(R.id.txtGravity);
         bikerView = (View) context.findViewById(R.id.biker_layout);
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
         Resources res = context.getResources();
@@ -53,17 +58,23 @@ public class SensorRotation implements SensorEventListener {
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         );
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+       // sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
+
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
+
+
         switch (event.sensor.getType()) {
             case Sensor.TYPE_MAGNETIC_FIELD:
                 mags = lowPass(event.values.clone(), mags);
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 accels = lowPass(event.values.clone(), accels);
+                getAccelerometer(event);
                 break;
         }
         long actualTime = event.timestamp;
@@ -100,6 +111,19 @@ public class SensorRotation implements SensorEventListener {
 
         }
 
+    }
+    private void getAccelerometer(SensorEvent event) {
+        float[] values = event.values;
+        // Movement
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
+
+        float accelationSquareRoot = (x * x + y * y + z * z)
+                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+
+
+           // gravityText.setText(String.valueOf(accelationSquareRoot));
     }
 
     private String parseRoll(float roll) {

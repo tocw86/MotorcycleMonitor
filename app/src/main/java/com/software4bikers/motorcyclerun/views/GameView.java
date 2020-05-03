@@ -104,20 +104,26 @@ public class GameView  extends View {
         @Override
         synchronized public void run() {
             frame.removeCallbacks(frameUpdate);
-            int max = Collections.max(rollArray);
-            int min = Collections.min(rollArray);
 
-            if(min < 0){
-                min = min * -1;
+            if(rollArray.size() > 0){
+
+                int max = Collections.max(rollArray);
+                int min = Collections.min(rollArray);
+
+                if(min < 0){
+                    min = min * -1;
+                }
+
+                if(min >= max){
+                    maximumRoll =  min * -1;
+                }else{
+                    maximumRoll = max;
+                }
+
+                rollArray = new ArrayList<Integer>();
+
             }
 
-            if(min >= max){
-                maximumRoll =  min * -1;
-            }else{
-                maximumRoll = max;
-            }
-
-            rollArray = new ArrayList<Integer>();
             frame.postDelayed(frameUpdate, 1000);
         }
     };
