@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.software4bikers.motorcyclerun.interval.LocationInterval;
 import com.software4bikers.motorcyclerun.interval.SpeedInterval;
 import com.software4bikers.motorcyclerun.listeners.GpsListener;
 import com.software4bikers.motorcyclerun.models.BikerLocation;
@@ -37,6 +38,7 @@ public class SensorLocation implements LocationListener {
     public  ImageView pseudo3dRoad;
     public BikerLocation bikerLocation;
     public SpeedInterval speedInterval;
+    public LocationInterval locationInterval;
     public int globalCurrentSpeed = 0;
     public List<Integer> speedCollection = new ArrayList<Integer>();
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
@@ -81,6 +83,7 @@ public class SensorLocation implements LocationListener {
             }
         }
         speedInterval = new SpeedInterval(this, 3000);
+        locationInterval = new LocationInterval(this, 15000);
     }
 
     @Override
