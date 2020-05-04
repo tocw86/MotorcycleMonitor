@@ -110,7 +110,6 @@ public class MainActivity extends Activity {
         /*load from raw folder*/
         pseudo3dRoad.setBottom(gameView.getHeight());
         Glide.with(this).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
-        Glide.with(this).load("http://openweathermap.org/img/wn/10d@2x.png").into(weatherIcon);
         gameHeight = gameView.getHeight();
         cloud1Animation = new CloudAnimation(cloud1View, 4000);
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
@@ -146,9 +145,6 @@ public class MainActivity extends Activity {
             cloud1Animation.start();
         }
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
-        weatherIcon.setLayoutParams(lp);
     }
 
     public void finish() {

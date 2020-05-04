@@ -1,39 +1,39 @@
 package com.software4bikers.motorcyclerun.interval;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
-import com.software4bikers.motorcyclerun.R;
+import com.bumptech.glide.Glide;
 import com.software4bikers.motorcyclerun.api.OWMApi;
 import com.software4bikers.motorcyclerun.factory.RetrofitFactory;
-import com.software4bikers.motorcyclerun.helpers.Helper;
-import com.software4bikers.motorcyclerun.responses.GeoWeather;
+import com.software4bikers.motorcyclerun.helpers.DistanceCalculator;
+import com.software4bikers.motorcyclerun.models.BikerLocation;
+import com.software4bikers.motorcyclerun.responses.GeoWeatherResponse;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 
-import okhttp3.ResponseBody;
+import java.text.DecimalFormat;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static android.provider.Settings.System.getString;
-
+import com.software4bikers.motorcyclerun.R;
 public class LocationInterval {
 
     public int frameRate;
     public double middleSpeed;
     public SensorLocation sensorLocation;
-
+    public BikerLocation lastLocation;
+    public ImageView weatherIcon;
     private Handler frame = new Handler();
 
     public LocationInterval(SensorLocation sensorLocation, int frameRate) {
         this.frameRate = frameRate;
         this.sensorLocation = sensorLocation;
+        this.weatherIcon = (ImageView) sensorLocation.mainActivity.findViewById(R.id.weather_icon);
     }
 
     public void setFrameRate(int frameRate) {
@@ -58,34 +58,60 @@ public class LocationInterval {
         @Override
         synchronized public void run() {
             frame.removeCallbacks(frameUpdate);
+            boolean getWeatherFlag = false;
             //code here
-            Log.d("xxx", "62");
             if(sensorLocation.getBikerLocation() != null){
-                String lat = String.valueOf(sensorLocation.getBikerLocation().getLat());
-                String lon = String.valueOf(sensorLocation.getBikerLocation().getLng());
-                Retrofit retrofit = new RetrofitFactory().getRetrofit();
-                OWMApi owmApi = retrofit.create(OWMApi.class);
-                Call<GeoWeather> call = owmApi.getGeoWeather(lat, lon, "3684486318b1d6c217c43712e17f2d89");
-                Log.d("xxx", "69");
-                call.enqueue(new Callback<GeoWeather>() {
+                if(lastLocation == null){
+                    getWeatherFlag = true;
+                }else{
+                    double bikerLat = Double.parseDouble(sensorLocation.getBikerLocation().getLat());
+                    double bikerLng = Double.parseDouble(sensorLocation.getBikerLocation().getLng());
+                    double lastLat = Double.parseDouble(lastLocation.getLat());
+                    double lastLng = Double.parseDouble(lastLocation.getLng());
+                    double distance = DistanceCalculator.distance(bikerLat, bikerLng, lastLat, lastLng, "K");
 
-                    @Override
-                    public void onResponse(Call<GeoWeather> call, Response<GeoWeather> response) {
-                        Log.d("xxx", response.toString());
+                    DecimalFormat format = new DecimalFormat("##.00");
+                    float formatedDist = Float.parseFloat(format.format(distance));
+
+                    //if distance is more than 10km
+                    if(formatedDist > 10){
+                        getWeatherFlag = true;
                     }
+                }
+                if(getWeatherFlag){
+                    String lat = String.valueOf(sensorLocation.getBikerLocation().getLat());
+                    String lon = String.valueOf(sensorLocation.getBikerLocation().getLng());
+                    Retrofit retrofit = new RetrofitFactory().getRetrofit();
+                    OWMApi owmApi = retrofit.create(OWMApi.class);
+                    Call<GeoWeatherResponse> call = owmApi.getGeoWeather(lat, lon, "3684486318b1d6c217c43712e17f2d89");
+                    call.enqueue(new Callback<GeoWeatherResponse>() {
 
-                    @Override
-                    public void onFailure(Call<GeoWeather> call, Throwable t) {
-                        Log.d("xxx", t.toString());
+                        @Override
+                        public void onResponse(Call<GeoWeatherResponse> call, Response<GeoWeatherResponse> response) {
+                            GeoWeatherResponse.Weather weather = response.body().getFirstItem();
+                            if(weather != null && String.valueOf(weather.icon) != null){
+                                Glide.with(sensorLocation.mainActivity).load("http://openweathermap.org/img/wn/"+weather.icon+"@2x.png").into(weatherIcon);
+                                weatherIcon.setVisibility(View.VISIBLE);
+                                setPosition(weatherIcon);
+                            }
 
-                    }
-                });
-
+                            lastLocation = new BikerLocation(sensorLocation.getBikerLocation().getLat(), sensorLocation.getBikerLocation().getLng());
+                        }
+                        @Override
+                        public void onFailure(Call<GeoWeatherResponse> call, Throwable t) {
+                        }
+                    });
+                }
             }
-
             frame.postDelayed(frameUpdate, frameRate);
         }
     };
+
+    private void setPosition(ImageView weatherIcon) {
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(sensorLocation.mainActivity.gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
+        weatherIcon.setLayoutParams(lp);
+    }
 
     synchronized private void init() {
         frame.removeCallbacks(frameUpdate);

@@ -19,7 +19,7 @@ public class GameRepository {
 
     public static void drawBiker(Canvas canvas, Resources resources, GameView gameView, int width, int roll) {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
-        Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker5);
+        Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker_4_pixelize);
         Matrix matrix = new Matrix();
         if(roll > 7 || roll < -7){
             matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());

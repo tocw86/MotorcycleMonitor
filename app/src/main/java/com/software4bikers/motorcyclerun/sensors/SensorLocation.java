@@ -83,7 +83,6 @@ public class SensorLocation implements LocationListener {
             }
         }
 
-        Log.d("xxx", "86");
         speedInterval = new SpeedInterval(this, 3000);
         locationInterval = new LocationInterval(this, 3000);
         locationInterval.start();
