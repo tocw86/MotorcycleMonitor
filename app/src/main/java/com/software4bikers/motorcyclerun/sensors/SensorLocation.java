@@ -82,8 +82,15 @@ public class SensorLocation implements LocationListener {
                }
             }
         }
+
+        Log.d("xxx", "86");
         speedInterval = new SpeedInterval(this, 3000);
-        locationInterval = new LocationInterval(this, 15000);
+        locationInterval = new LocationInterval(this, 3000);
+        locationInterval.start();
+    }
+
+    public BikerLocation getBikerLocation() {
+        return bikerLocation;
     }
 
     @Override
@@ -94,6 +101,7 @@ public class SensorLocation implements LocationListener {
         if(location != null){
             CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
+            bikerLocation = new BikerLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
         }
     }
 

@@ -47,7 +47,7 @@ public class LocationInterval {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initGfx();
+                init();
             }
         }, frameRate);
 
@@ -59,13 +59,14 @@ public class LocationInterval {
         synchronized public void run() {
             frame.removeCallbacks(frameUpdate);
             //code here
-
-            if(sensorLocation.bikerLocation != null){
-                String lat = String.valueOf(sensorLocation.bikerLocation.getLat());
-                String lon = String.valueOf(sensorLocation.bikerLocation.getLng());
+            Log.d("xxx", "62");
+            if(sensorLocation.getBikerLocation() != null){
+                String lat = String.valueOf(sensorLocation.getBikerLocation().getLat());
+                String lon = String.valueOf(sensorLocation.getBikerLocation().getLng());
                 Retrofit retrofit = new RetrofitFactory().getRetrofit();
                 OWMApi owmApi = retrofit.create(OWMApi.class);
                 Call<GeoWeather> call = owmApi.getGeoWeather(lat, lon, "3684486318b1d6c217c43712e17f2d89");
+                Log.d("xxx", "69");
                 call.enqueue(new Callback<GeoWeather>() {
 
                     @Override
@@ -86,7 +87,7 @@ public class LocationInterval {
         }
     };
 
-    synchronized private void initGfx() {
+    synchronized private void init() {
         frame.removeCallbacks(frameUpdate);
         frame.postDelayed(frameUpdate, frameRate);
     }

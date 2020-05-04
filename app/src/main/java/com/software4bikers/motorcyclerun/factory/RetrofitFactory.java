@@ -18,6 +18,7 @@ public class RetrofitFactory {
 
         Retrofit.Builder builder = new Retrofit.Builder();
         builder.client(client);
+        builder.baseUrl("https://api.openweathermap.org");
         builder.addConverterFactory(ScalarsConverterFactory.create());
         builder.addConverterFactory(GsonConverterFactory.create());
         retrofit = builder.build();

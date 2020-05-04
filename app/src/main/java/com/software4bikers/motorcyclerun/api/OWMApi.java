@@ -7,17 +7,12 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface OWMApi {
-    @GET("api.openweathermap.org/data/2.5/weather?q={city}&appid={appId}&units=metric")
+    @GET("/data/2.5/weather?lang=en&units=metric")
     @Headers({
             "Content-Type: application/json",
     })
-    Call<CityWeather> getCityWeather(@Path("city") String city, @Path("appId") String appId);
-
-    @GET("api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={appId}&lang=en&units=metric")
-    @Headers({
-            "Content-Type: application/json",
-    })
-    Call<GeoWeather> getGeoWeather(@Path("lat") String lat, @Path("lon") String lon, @Path("appId") String appId);
+    Call<GeoWeather> getGeoWeather(@Query("lat") String lat, @Query("lon") String lon, @Query("appId") String appId);
 }
