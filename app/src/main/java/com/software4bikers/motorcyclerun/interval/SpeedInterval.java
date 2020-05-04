@@ -3,14 +3,17 @@ package com.software4bikers.motorcyclerun.interval;
 import android.os.Handler;
 import android.widget.ImageView;
 
+import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 
 import java.security.Timestamp;
+import java.util.Collections;
 import java.util.Date;
 
 public class SpeedInterval {
 
     public int frameRate;
+    public double middleSpeed;
     public SensorLocation sensorLocation;
 
     private Handler frame = new Handler();
@@ -44,9 +47,11 @@ public class SpeedInterval {
             frame.removeCallbacks(frameUpdate);
             //code here
 
-            long actualTimestamp = System.currentTimeMillis() / 1000;
-            if(sensorLocation.globalCurrentSpeed > 0){
-
+            if(sensorLocation.speedCollection.size() > 0){
+                double mediana = Helper.median(sensorLocation.speedCollection);
+                if(mediana > 10){
+                    middleSpeed = mediana;
+                }
             }
             frame.postDelayed(frameUpdate, frameRate);
         }
@@ -55,5 +60,9 @@ public class SpeedInterval {
     synchronized private void initGfx() {
         frame.removeCallbacks(frameUpdate);
         frame.postDelayed(frameUpdate, frameRate);
+    }
+
+    public double getMiddleSpeed(){
+        return middleSpeed;
     }
 }

@@ -22,6 +22,7 @@ import com.software4bikers.motorcyclerun.models.CLocation;
 import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.R;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +38,7 @@ public class SensorLocation implements LocationListener {
     public BikerLocation bikerLocation;
     public SpeedInterval speedInterval;
     public int globalCurrentSpeed = 0;
+    public List<Integer> speedCollection = new ArrayList<Integer>();
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
@@ -78,7 +80,7 @@ public class SensorLocation implements LocationListener {
                }
             }
         }
-        speedInterval = new SpeedInterval(this, 1000);
+        speedInterval = new SpeedInterval(this, 3000);
     }
 
     @Override
@@ -134,7 +136,10 @@ public class SensorLocation implements LocationListener {
         }
         this.checkSpeedAndAdjustGraphics(nCurrentSpeed);
         this.mainActivity.gameView.setSpeed((int) nCurrentSpeed);
-        this.globalCurrentSpeed = (int) nCurrentSpeed;
+
+        if((int) nCurrentSpeed > 0){
+            this.speedCollection.add((int) nCurrentSpeed);
+        }
         this.txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
 
