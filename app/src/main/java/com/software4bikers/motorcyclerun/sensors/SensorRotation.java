@@ -15,6 +15,8 @@ import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.R;
 import com.software4bikers.motorcyclerun.views.GameView;
 
+import java.text.DecimalFormat;
+
 public class SensorRotation implements SensorEventListener {
     static final float ALPHA = 0.25f;
     public MainActivity context;
@@ -122,8 +124,10 @@ public class SensorRotation implements SensorEventListener {
         float accelationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
 
-
-           // gravityText.setText(String.valueOf(accelationSquareRoot));
+        DecimalFormat format = new DecimalFormat("##.00");
+        String formatedG = new String(format.format(accelationSquareRoot) + "G");
+        formatedG = formatedG.replace(",",".");
+        gravityText.setText(formatedG);
     }
 
     private String parseRoll(float roll) {

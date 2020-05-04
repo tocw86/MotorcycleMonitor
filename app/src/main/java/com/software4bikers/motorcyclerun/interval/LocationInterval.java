@@ -1,5 +1,8 @@
 package com.software4bikers.motorcyclerun.interval;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -70,15 +73,21 @@ public class LocationInterval {
                     double lastLng = Double.parseDouble(lastLocation.getLng());
                     double distance = DistanceCalculator.distance(bikerLat, bikerLng, lastLat, lastLng, "K");
 
-                    DecimalFormat format = new DecimalFormat("##.00");
-                    float formatedDist = Float.parseFloat(format.format(distance));
+                    int formatedDist = (int) Math.round(distance);
 
                     //if distance is more than 10km
                     if(formatedDist > 10){
                         getWeatherFlag = true;
                     }
                 }
-                if(getWeatherFlag){
+                ConnectivityManager cm =
+                        (ConnectivityManager) sensorLocation.mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+
+                if(getWeatherFlag && isConnected){
                     String lat = String.valueOf(sensorLocation.getBikerLocation().getLat());
                     String lon = String.valueOf(sensorLocation.getBikerLocation().getLng());
                     Retrofit retrofit = new RetrofitFactory().getRetrofit();
