@@ -81,6 +81,22 @@ public class MainActivity extends Activity {
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        startApp();
+    }
+
+    public void startGfx(Handler h) {
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               setUpGfx();
+            }
+        }, 1000);
+
+    }
+
     public void startApp() {
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
@@ -102,51 +118,38 @@ public class MainActivity extends Activity {
         startGfx(new Handler());
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        startApp();
+    private void setUpGfx(){
+        if (bgDaylight.getPaddingBottom() == 0) {
+            bgDaylight.setPadding(0, 0, 0, pseudo3dRoad.getHeight());
+        }
+        if (cloud3View.getPaddingTop() == 0) {
+            cloud3PosY = gameView.getHeight() / 3;
+            cloud3PosX = (int) (gameView.getWidth() * 0.7);
+            cloud3View.setPadding(cloud3PosX, cloud3PosY, 0, 0);
+            cloud3View.setVisibility(View.VISIBLE);
+
+            cloud2Animation.setLeft(cloud3PosX);
+            cloud2Animation.setTop(cloud3PosY);
+            cloud2Animation.setPosYChange(10);
+            cloud2Animation.start();
+
+        }
+        if (cloud1View.getPaddingTop() == 0) {
+            cloud1PosY = 140;
+            cloud1PosX = -25;
+            cloud1View.setPadding(cloud1PosX, cloud1PosY, 0, 0);
+            cloud1View.setVisibility(View.VISIBLE);
+
+            cloud1Animation.setLeft(cloud1PosX);
+            cloud1Animation.setTop(cloud1PosY);
+            cloud1Animation.setPosYChange(5);
+            cloud1Animation.start();
+        }
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
+        weatherIcon.setLayoutParams(lp);
     }
-
-    public void startGfx(Handler h) {
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (bgDaylight.getPaddingBottom() == 0) {
-                    bgDaylight.setPadding(0, 0, 0, pseudo3dRoad.getHeight());
-                }
-                if (cloud3View.getPaddingTop() == 0) {
-                    cloud3PosY = gameView.getHeight() / 3;
-                    cloud3PosX = (int) (gameView.getWidth() * 0.7);
-                    cloud3View.setPadding(cloud3PosX, cloud3PosY, 0, 0);
-                    cloud3View.setVisibility(View.VISIBLE);
-
-                    cloud2Animation.setLeft(cloud3PosX);
-                    cloud2Animation.setTop(cloud3PosY);
-                    cloud2Animation.setPosYChange(10);
-                    cloud2Animation.start();
-
-                }
-                if (cloud1View.getPaddingTop() == 0) {
-                    cloud1PosY = 140;
-                    cloud1PosX = -25;
-                    cloud1View.setPadding(cloud1PosX, cloud1PosY, 0, 0);
-                    cloud1View.setVisibility(View.VISIBLE);
-
-                    cloud1Animation.setLeft(cloud1PosX);
-                    cloud1Animation.setTop(cloud1PosY);
-                    cloud1Animation.setPosYChange(5);
-                    cloud1Animation.start();
-                }
-
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
-                weatherIcon.setLayoutParams(lp);
-            }
-        }, 1000);
-
-    }
-
 
     public void finish() {
         super.finish();

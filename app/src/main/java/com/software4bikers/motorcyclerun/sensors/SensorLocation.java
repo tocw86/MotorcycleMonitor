@@ -15,7 +15,9 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.software4bikers.motorcyclerun.interval.SpeedInterval;
 import com.software4bikers.motorcyclerun.listeners.GpsListener;
+import com.software4bikers.motorcyclerun.models.BikerLocation;
 import com.software4bikers.motorcyclerun.models.CLocation;
 import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.R;
@@ -32,6 +34,9 @@ public class SensorLocation implements LocationListener {
     public TextView txtCurrentSpeed;
     public GpsListener gpsStatus;
     public  ImageView pseudo3dRoad;
+    public BikerLocation bikerLocation;
+    public SpeedInterval speedInterval;
+    public int globalCurrentSpeed = 0;
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
@@ -58,20 +63,22 @@ public class SensorLocation implements LocationListener {
             this.onLocationChanged(null);
         }
 
-   /*     if (locationManager != null) {
+       if (locationManager != null) {
             Location lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastKnownLocationGPS != null) {
-                txtLat.setText(String.valueOf(lastKnownLocationGPS.getLatitude()));
-               txtLng.setText(String.valueOf(lastKnownLocationGPS.getLongitude()));
+             String lat = String.valueOf(lastKnownLocationGPS.getLatitude());
+              String lng = String.valueOf(lastKnownLocationGPS.getLongitude());
+              bikerLocation = new BikerLocation(lat, lng);
             } else {
                 Location loc =  locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
                if(loc != null){
-                   txtLat.setText(String.valueOf(loc.getLatitude()));
-                   txtLng.setText(String.valueOf(loc.getLongitude()));
+                   String lat = String.valueOf(loc.getLatitude());
+                   String lng = String.valueOf(loc.getLongitude());
+                   bikerLocation = new BikerLocation(lat, lng);
                }
             }
-        } else {
-        }*/
+        }
+        speedInterval = new SpeedInterval(this, 1000);
     }
 
     @Override
@@ -127,6 +134,8 @@ public class SensorLocation implements LocationListener {
         }
         this.checkSpeedAndAdjustGraphics(nCurrentSpeed);
         this.mainActivity.gameView.setSpeed((int) nCurrentSpeed);
+        this.globalCurrentSpeed = (int) nCurrentSpeed;
         this.txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
     }
+
 }
