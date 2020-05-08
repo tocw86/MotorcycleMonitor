@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 
 import com.software4bikers.motorcyclerun.animations.CloudAnimation;
+import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.views.GameView;
@@ -27,6 +29,7 @@ import com.software4bikers.motorcyclerun.views.GameView;
 public class MainActivity extends Activity {
     public SensorRotation sensorRotation;
     public SensorLocation sensorLocation;
+    public SensorLight sensorLight;
     public View rootLayout;
     public GameView gameView;
     public int gameHeight;
@@ -35,6 +38,7 @@ public class MainActivity extends Activity {
     public ImageView cloud3View;
     public ImageView cloud1View;
     public ImageView weatherIcon;
+    public TextView txtLux;
     int cloud3PosY;
     int cloud3PosX;
 
@@ -98,11 +102,13 @@ public class MainActivity extends Activity {
     }
 
     public void startApp() {
+        txtLux = (TextView) this.findViewById(R.id.txtLux);
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this, pseudo3dRoad);
+        sensorLight = new SensorLight(this, txtLux);
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
         weatherIcon = this.findViewById(R.id.weather_icon);
