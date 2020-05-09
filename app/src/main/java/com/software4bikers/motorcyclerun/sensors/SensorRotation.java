@@ -91,9 +91,19 @@ public class SensorRotation implements SensorEventListener {
                     }
                     mags = null;
                     accels = null;
-                    gameView.setRoll((int) roll);
-                    txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
-                    lastUpdate = actualTime;
+                 //   if((int) roll >= 5 || (int) roll <= -5){
+                  /*      gameView.setRoll((int) roll);
+                        txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
+                    }else{
+                        gameView.setRoll(0);
+                        txtRoll.setText("0° N");
+
+                    }*/
+
+                       gameView.setRoll((int) roll);
+                        txtRoll.setText(this.parseRoll((int) roll));
+
+                        lastUpdate = actualTime;
                 }
 
             }

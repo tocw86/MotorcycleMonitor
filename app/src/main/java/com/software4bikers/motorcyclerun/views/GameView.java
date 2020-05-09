@@ -89,7 +89,7 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
         invalidate();
     }
     synchronized private void calculateRoll() {
