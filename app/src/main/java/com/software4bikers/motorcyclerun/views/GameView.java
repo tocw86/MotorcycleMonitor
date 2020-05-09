@@ -110,12 +110,9 @@ public class GameView  extends View {
                 int max = Collections.max(rollArray);
                 int min = Collections.min(rollArray);
 
-                if(min < 0){
+                if(min < 0 && max <=5){
                     min = min * -1;
-                }
-
-                if(min >= max){
-                    maximumRoll =  min * -1;
+                    maximumRoll =  min;
                 }else{
                     maximumRoll = max;
                 }
