@@ -14,7 +14,7 @@ public class GpsListener implements GpsStatus.Listener {
     public TextView txtGpsStatus;
     public GpsListener(MainActivity context) {
         mainActivity = context;
-        gpsStatusView = (ImageView) mainActivity.findViewById(R.id.gpsStatusView);
+        gpsStatusView = mainActivity.findViewById(R.id.gpsStatusView);
     }
 
     @Override

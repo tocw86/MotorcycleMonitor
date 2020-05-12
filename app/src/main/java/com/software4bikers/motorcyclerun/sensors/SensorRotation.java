@@ -26,11 +26,11 @@ public class SensorRotation implements SensorEventListener {
     public TextView txtRawRoll;
     public int xMove;
     // Gravity rotational data
-    private float gravity[];
+    private float[] gravity;
     // Magnetic rotational data
-    private float magnetic[]; //for magnetic rotational data
-    private float accels[] = new float[3];
-    private float mags[] = new float[3];
+    private float[] magnetic; //for magnetic rotational data
+    private float[] accels = new float[3];
+    private float[] mags = new float[3];
     private float[] values = new float[3];
 
     // azimuth, pitch and roll
@@ -48,8 +48,8 @@ public class SensorRotation implements SensorEventListener {
         this.gameView = gameView;
         context = mainActivity;
         calibrateRollValue = 0;
-        bikerView = (View) context.findViewById(R.id.biker_layout);
-        txtRoll = (TextView) context.findViewById(R.id.txtRoll);
+        bikerView = context.findViewById(R.id.biker_layout);
+        txtRoll = context.findViewById(R.id.txtRoll);
         Resources res = context.getResources();
         sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
@@ -68,10 +68,6 @@ public class SensorRotation implements SensorEventListener {
                 accels = lowPass(event.values.clone(), accels);
                 break;
         }
-        long actualTime = event.timestamp;
-
-        if(actualTime - lastUpdate > 500000) {
-
             if (mags != null && accels != null) {
                 gravity = new float[9];
                 magnetic = new float[9];
@@ -93,25 +89,15 @@ public class SensorRotation implements SensorEventListener {
                     }
                     mags = null;
                     accels = null;
-                 //   if((int) roll >= 5 || (int) roll <= -5){
-                  /*      gameView.setRoll((int) roll);
+                    if(roll != 0){
+                        gameView.setRoll((int) roll);
                         txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
                     }else{
-                        gameView.setRoll(0);
                         txtRoll.setText("0° N");
 
-                    }*/
-
-                       gameView.setRoll((int) roll);
-                        txtRoll.setText(this.parseRoll((int) roll));
-
-                        lastUpdate = actualTime;
+                    }
                 }
-
             }
-
-        }
-
     }
 
     private String parseRoll(float roll) {
@@ -125,7 +111,7 @@ public class SensorRotation implements SensorEventListener {
         }else{
             side = "R";
         }
-       return String.valueOf(tmpRoll) + "°" + " " + side;
+       return tmpRoll + "°" + " " + side;
     }
 
 

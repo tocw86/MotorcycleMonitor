@@ -89,7 +89,7 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
         invalidate();
     }
     synchronized private void calculateRoll() {
@@ -106,20 +106,41 @@ public class GameView  extends View {
             frame.removeCallbacks(frameUpdate);
 
             if(rollArray.size() > 0){
+                int testMin = Collections.min(rollArray);
+                int testMax = Collections.max(rollArray);
 
-                int max = Collections.max(rollArray);
-                int min = Collections.min(rollArray);
+                if(testMin < 0 && testMax < 0){
+                    // N = {C-}
+                        maximumRoll = testMin;
+                }else if(testMin < 0 && testMax > 0){
+                    // N = {C-,C+}
 
-                if(min < 0 && max <=5){
-                    min = min * -1;
-                    maximumRoll =  min;
-                }else{
-                    maximumRoll = max;
+                    List<Integer> setNegative = new ArrayList<Integer>();
+                    List<Integer> setUnsigned = new ArrayList<Integer>();
+
+                    for(int val : rollArray){
+                        if(val < 0){
+                            setNegative.add(val);
+                        }else{
+                            setUnsigned.add(val);
+                        }
+                    }
+
+                    if(setUnsigned.size() >= setNegative.size()){
+                        maximumRoll = Collections.max(setUnsigned);
+                    }else{
+                        maximumRoll = Collections.min(setNegative);
+                    }
+
+                }else if(testMin > 0 && testMax > 0){
+                    //N = {C+}
+                    maximumRoll = testMax;
                 }
 
-                rollArray = new ArrayList<Integer>();
-
+            }else{
+                maximumRoll = 0;
             }
+            rollArray = new ArrayList<Integer>();
 
             frame.postDelayed(frameUpdate, 1000);
         }

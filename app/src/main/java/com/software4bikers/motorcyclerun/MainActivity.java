@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
     }
 
     public void startApp() {
-        txtLux = (TextView) this.findViewById(R.id.txtLux);
+        txtLux = this.findViewById(R.id.txtLux);
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);

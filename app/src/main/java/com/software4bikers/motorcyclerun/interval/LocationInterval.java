@@ -36,7 +36,7 @@ public class LocationInterval {
     public LocationInterval(SensorLocation sensorLocation, int frameRate) {
         this.frameRate = frameRate;
         this.sensorLocation = sensorLocation;
-        this.weatherIcon = (ImageView) sensorLocation.mainActivity.findViewById(R.id.weather_icon);
+        this.weatherIcon = sensorLocation.mainActivity.findViewById(R.id.weather_icon);
     }
 
     public void setFrameRate(int frameRate) {

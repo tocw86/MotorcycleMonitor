@@ -44,7 +44,7 @@ public class SensorLocation implements LocationListener {
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
-        txtCurrentSpeed = (TextView) mainActivity.findViewById(R.id.txtCurrentSpeed);
+        txtCurrentSpeed = mainActivity.findViewById(R.id.txtCurrentSpeed);
         this.pseudo3dRoad = pseudo3dRoad;
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
