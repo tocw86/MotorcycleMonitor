@@ -111,7 +111,6 @@ public class MainActivity extends Activity {
         sensorLight = new SensorLight(this, txtLux);
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
-        weatherIcon = this.findViewById(R.id.weather_icon);
         bgDaylight = this.findViewById(R.id.bg_daylight);
         /*load from raw folder*/
         pseudo3dRoad.setBottom(gameView.getHeight());

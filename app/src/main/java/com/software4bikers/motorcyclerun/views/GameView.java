@@ -89,7 +89,7 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll);
         invalidate();
     }
     synchronized private void calculateRoll() {
@@ -110,12 +110,9 @@ public class GameView  extends View {
                 int max = Collections.max(rollArray);
                 int min = Collections.min(rollArray);
 
-                if(min < 0){
+                if(min < 0 && max <=5){
                     min = min * -1;
-                }
-
-                if(min >= max){
-                    maximumRoll =  min * -1;
+                    maximumRoll =  min;
                 }else{
                     maximumRoll = max;
                 }

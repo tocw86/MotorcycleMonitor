@@ -43,16 +43,11 @@ public class SensorRotation implements SensorEventListener {
     public GameView gameView;
     public ImageView imageView;
     public View bikerView;
-    public TextView gravityText;
-    private float[] gravityRaw = new float[3];
-    private float[] linearAcceleration = new float[3];
-
     public SensorRotation(MainActivity mainActivity, GameView gameView) {
         lastUpdate = System.currentTimeMillis();
         this.gameView = gameView;
         context = mainActivity;
         calibrateRollValue = 0;
-        gravityText = (TextView) context.findViewById(R.id.txtGravity);
         bikerView = (View) context.findViewById(R.id.biker_layout);
         txtRoll = (TextView) context.findViewById(R.id.txtRoll);
         Resources res = context.getResources();
@@ -60,23 +55,17 @@ public class SensorRotation implements SensorEventListener {
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         );
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-       // sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
-
-
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
-
-
         switch (event.sensor.getType()) {
             case Sensor.TYPE_MAGNETIC_FIELD:
                 mags = lowPass(event.values.clone(), mags);
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 accels = lowPass(event.values.clone(), accels);
-                getAccelerometer(event);
                 break;
         }
         long actualTime = event.timestamp;
@@ -104,30 +93,25 @@ public class SensorRotation implements SensorEventListener {
                     }
                     mags = null;
                     accels = null;
-                    gameView.setRoll((int) roll);
-                    txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
-                    lastUpdate = actualTime;
+                 //   if((int) roll >= 5 || (int) roll <= -5){
+                  /*      gameView.setRoll((int) roll);
+                        txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
+                    }else{
+                        gameView.setRoll(0);
+                        txtRoll.setText("0° N");
+
+                    }*/
+
+                       gameView.setRoll((int) roll);
+                        txtRoll.setText(this.parseRoll((int) roll));
+
+                        lastUpdate = actualTime;
                 }
 
             }
 
         }
 
-    }
-    private void getAccelerometer(SensorEvent event) {
-        float[] values = event.values;
-        // Movement
-        float x = values[0];
-        float y = values[1];
-        float z = values[2];
-
-        float accelationSquareRoot = (x * x + y * y + z * z)
-                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-
-        DecimalFormat format = new DecimalFormat("##.00");
-        String formatedG = new String(format.format(accelationSquareRoot) + "G");
-        formatedG = formatedG.replace(",",".");
-        gravityText.setText(formatedG);
     }
 
     private String parseRoll(float roll) {
