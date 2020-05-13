@@ -39,15 +39,16 @@ public class MainActivity extends Activity {
     public ImageView cloud3View;
     public ImageView cloud1View;
     public ImageView weatherIcon;
+    public ImageView angleView;
     public TextView txtLux;
     public TextView txtCurrentSpeed;
     public TextView txtSpeedLabel;
-    public boolean isDay = false;
-    int cloud3PosY;
-    int cloud3PosX;
-
-    int cloud1PosY;
-    int cloud1PosX;
+    public TextView txtRoll;
+    public boolean isDay = true;
+    public int cloud3PosY;
+    public int cloud3PosX;
+    public int cloud1PosY;
+    public int cloud1PosX;
 
     public CloudAnimation cloud1Animation;
     public CloudAnimation cloud2Animation;
@@ -118,45 +119,22 @@ public class MainActivity extends Activity {
         bgDaylight = this.findViewById(R.id.bg_daylight);
         txtCurrentSpeed = this.findViewById(R.id.txtCurrentSpeed);
         txtSpeedLabel = this.findViewById(R.id.txtSpeedLabel);
+        angleView = this.findViewById(R.id.angleView);
+        txtRoll = this.findViewById(R.id.txtRoll);
         /*load from raw folder*/
 
-        Helper.themeRefresh(this);
 
         pseudo3dRoad.setBottom(gameView.getHeight());
         gameHeight = gameView.getHeight();
         cloud1Animation = new CloudAnimation(cloud1View, 4000);
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
         startGfx(new Handler());
+
+
     }
 
     private void setUpGfx(){
-        if (bgDaylight.getPaddingBottom() == 0) {
-            bgDaylight.setPadding(0, 0, 0, pseudo3dRoad.getHeight());
-        }
-        if (cloud3View.getPaddingTop() == 0) {
-            cloud3PosY = gameView.getHeight() / 3;
-            cloud3PosX = (int) (gameView.getWidth() * 0.7);
-            cloud3View.setPadding(cloud3PosX, cloud3PosY, 0, 0);
-            cloud3View.setVisibility(View.VISIBLE);
-
-            cloud2Animation.setLeft(cloud3PosX);
-            cloud2Animation.setTop(cloud3PosY);
-            cloud2Animation.setPosYChange(10);
-            cloud2Animation.start();
-
-        }
-        if (cloud1View.getPaddingTop() == 0) {
-            cloud1PosY = 140;
-            cloud1PosX = -25;
-            cloud1View.setPadding(cloud1PosX, cloud1PosY, 0, 0);
-            cloud1View.setVisibility(View.VISIBLE);
-
-            cloud1Animation.setLeft(cloud1PosX);
-            cloud1Animation.setTop(cloud1PosY);
-            cloud1Animation.setPosYChange(5);
-            cloud1Animation.start();
-        }
-
+        Helper.themeRefresh(this);
     }
 
     public void finish() {

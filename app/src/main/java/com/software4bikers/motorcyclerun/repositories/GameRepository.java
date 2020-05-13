@@ -17,11 +17,16 @@ import java.util.Random;
 
 public class GameRepository {
 
-    public static void drawBiker(Canvas canvas, Resources resources, GameView gameView, int width, int roll) {
+    public static void drawBiker(Canvas canvas, Resources resources, GameView gameView, int width, int roll, boolean isDay) {
         int paddingTop = (int) Math.round(gameView.getHeight() * 0.7);
-        Bitmap bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker_4_pixelize);
+        Bitmap bitmapOrg;
+        if(isDay){
+             bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker_4_pixelize);
+        }else{
+             bitmapOrg = BitmapFactory.decodeResource(resources, R.drawable.biker_4_pixelize_night);
+        }
         Matrix matrix = new Matrix();
-        if(roll > 7 || roll < -7){
+        if(roll > 5 || roll < -5){
             matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
         }else{
             matrix.setRotate(0, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());

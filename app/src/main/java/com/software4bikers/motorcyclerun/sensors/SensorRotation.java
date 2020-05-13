@@ -60,6 +60,7 @@ public class SensorRotation implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        gameView.setDay(context.isDay);
         switch (event.sensor.getType()) {
             case Sensor.TYPE_MAGNETIC_FIELD:
                 mags = lowPass(event.values.clone(), mags);

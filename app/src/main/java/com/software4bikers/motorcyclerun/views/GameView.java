@@ -32,6 +32,7 @@ public class GameView  extends View {
     public int posY;
     public int maximumRoll = 0;
     public List<Integer> rollArray;
+    public boolean isDay;
     private Handler frame = new Handler();
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
@@ -63,6 +64,10 @@ public class GameView  extends View {
         },1000);
     }
 
+    public void setDay(boolean day) {
+        isDay = day;
+    }
+
     public int getMaximumRoll() {
         return maximumRoll;
     }
@@ -85,11 +90,13 @@ public class GameView  extends View {
         invalidate();
         requestLayout();
     }
-
+    public boolean getDay(){
+        return isDay;
+    }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll, this.isDay);
         invalidate();
     }
     synchronized private void calculateRoll() {
