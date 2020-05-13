@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 
 import com.software4bikers.motorcyclerun.animations.CloudAnimation;
+import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 import com.software4bikers.motorcyclerun.sensors.SensorRotation;
@@ -39,6 +40,9 @@ public class MainActivity extends Activity {
     public ImageView cloud1View;
     public ImageView weatherIcon;
     public TextView txtLux;
+    public TextView txtCurrentSpeed;
+    public TextView txtSpeedLabel;
+    public boolean isDay = false;
     int cloud3PosY;
     int cloud3PosX;
 
@@ -112,13 +116,16 @@ public class MainActivity extends Activity {
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
         bgDaylight = this.findViewById(R.id.bg_daylight);
+        txtCurrentSpeed = this.findViewById(R.id.txtCurrentSpeed);
+        txtSpeedLabel = this.findViewById(R.id.txtSpeedLabel);
         /*load from raw folder*/
+
+        Helper.themeRefresh(this);
+
         pseudo3dRoad.setBottom(gameView.getHeight());
-        Glide.with(this).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
         gameHeight = gameView.getHeight();
         cloud1Animation = new CloudAnimation(cloud1View, 4000);
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
-        bgDaylight = this.findViewById(R.id.bg_daylight);
         startGfx(new Handler());
     }
 

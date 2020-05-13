@@ -119,7 +119,8 @@ public class SensorLocation implements LocationListener {
 
     private void checkSpeedAndAdjustGraphics(float nCurrentSpeed){
 
-       if(nCurrentSpeed == 0){
+     if(mainActivity.isDay){
+        if(nCurrentSpeed == 0){
             Glide.with(mainActivity).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
         }else if(nCurrentSpeed > 10 && nCurrentSpeed <= 25){
             Glide.with(mainActivity).load(R.drawable.road_pixelized_25).into(pseudo3dRoad);
@@ -132,6 +133,24 @@ public class SensorLocation implements LocationListener {
         }else if(nCurrentSpeed > 100){
            Glide.with(mainActivity).load(R.drawable.road_pixelized_150).into(pseudo3dRoad);
        }
+
+     }else{
+        if(nCurrentSpeed == 0){
+            Glide.with(mainActivity).load(R.drawable.road_night_0).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 10 && nCurrentSpeed <= 25){
+            Glide.with(mainActivity).load(R.drawable.road_night_25).into(pseudo3dRoad);
+        }else if (nCurrentSpeed > 25 && nCurrentSpeed <= 50){
+            Glide.with(mainActivity).load(R.drawable.road_night_50).into(pseudo3dRoad);
+        }else if (nCurrentSpeed > 50 && nCurrentSpeed <= 75){
+            Glide.with(mainActivity).load(R.drawable.road_night_75).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 75 && nCurrentSpeed <= 100){
+            Glide.with(mainActivity).load(R.drawable.road_night_100).into(pseudo3dRoad);
+        }else if(nCurrentSpeed > 100){
+           Glide.with(mainActivity).load(R.drawable.road_night_150).into(pseudo3dRoad);
+       }
+
+     }   
+     
 
     }
 

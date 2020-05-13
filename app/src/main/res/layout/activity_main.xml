@@ -90,6 +90,7 @@
                         android:fontFamily="@font/anton"
                         android:textSize="120sp" />
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txtSpeedLabel"
                         android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
