@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
     public ImageView bgDaylight;
     public ImageView cloud3View;
     public ImageView cloud1View;
-    public ImageView weatherIcon;
     public ImageView angleView;
     public TextView txtLux;
     public TextView txtCurrentSpeed;

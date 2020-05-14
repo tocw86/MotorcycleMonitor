@@ -43,20 +43,23 @@
         </ImageView>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/weatherLayout"
+            android:layout_width="match_parent"
+            android:gravity="end"
             android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/weather_icon"
             android:layout_width="100dp"
             android:layout_marginLeft="0dp"
-            android:layout_height="100dp"/>
-            <TextView
+            android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_below="@+id/weather_icon"
-                android:text="0"
+                android:id="@+id/weatherText"
                 android:textColor="@color/black"
                 android:fontFamily="@font/anton"
-                android:textSize="10dp"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
 

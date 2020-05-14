@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.software4bikers.motorcyclerun.api.OWMApi;
@@ -31,12 +32,16 @@ public class LocationInterval {
     public SensorLocation sensorLocation;
     public BikerLocation lastLocation;
     public ImageView weatherIcon;
+    public TextView weatherText;
+    public RelativeLayout weatherLayout;
     private Handler frame = new Handler();
 
     public LocationInterval(SensorLocation sensorLocation, int frameRate) {
         this.frameRate = frameRate;
         this.sensorLocation = sensorLocation;
         this.weatherIcon = sensorLocation.mainActivity.findViewById(R.id.weather_icon);
+        this.weatherText = sensorLocation.mainActivity.findViewById(R.id.weatherText);
+        this.weatherLayout = sensorLocation.mainActivity.findViewById(R.id.weatherLayout);
     }
 
     public void setFrameRate(int frameRate) {
@@ -98,10 +103,15 @@ public class LocationInterval {
                         @Override
                         public void onResponse(Call<GeoWeatherResponse> call, Response<GeoWeatherResponse> response) {
                             GeoWeatherResponse.Weather weather = response.body().getFirstItem();
+                            GeoWeatherResponse geoWeatherResponse = response.body();
+
                             if(weather != null && String.valueOf(weather.icon) != null){
                                 Glide.with(sensorLocation.mainActivity).load("http://openweathermap.org/img/wn/"+weather.icon+"@2x.png").into(weatherIcon);
                                 weatherIcon.setVisibility(View.VISIBLE);
-                                setPosition(weatherIcon);
+                                //setPosition(weatherIcon);
+                               // setLayoutPosition(weatherLayout);
+                                long temp = Math.round(Double.parseDouble(geoWeatherResponse.main.temp));
+                                weatherText.setText(String.valueOf(temp) + " °C");
                             }
 
                             lastLocation = new BikerLocation(sensorLocation.getBikerLocation().getLat(), sensorLocation.getBikerLocation().getLng());
@@ -115,7 +125,11 @@ public class LocationInterval {
             frame.postDelayed(frameUpdate, frameRate);
         }
     };
-
+private  void setLayoutPosition(RelativeLayout weatherLayout){
+    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    lp.setMargins(sensorLocation.mainActivity.gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
+    weatherLayout.setLayoutParams(lp);
+}
     private void setPosition(ImageView weatherIcon) {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(sensorLocation.mainActivity.gameView.getWidth() - weatherIcon.getWidth(), 0, 0, 0);
