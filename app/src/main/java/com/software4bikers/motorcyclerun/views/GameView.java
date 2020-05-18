@@ -55,13 +55,13 @@ public class GameView  extends View {
         }
 
 
-        Handler handler = new Handler();
+       /* Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 calculateRoll();
             }
-        },1000);
+        },1000);*/
     }
 
     public void setDay(boolean day) {
@@ -96,7 +96,7 @@ public class GameView  extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.maximumRoll, this.isDay);
+        GameRepository.drawBiker(canvas, getResources(), this, this.getWidth(), this.roll, this.isDay);
         invalidate();
     }
     synchronized private void calculateRoll() {

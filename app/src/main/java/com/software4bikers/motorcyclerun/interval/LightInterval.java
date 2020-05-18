@@ -3,6 +3,7 @@ package com.software4bikers.motorcyclerun.interval;
 import android.os.Handler;
 import android.widget.TextView;
 
+import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 
@@ -16,11 +17,13 @@ public class LightInterval {
     public List<Integer> luxCollection;
     public TextView txtLux;
     private Handler frame = new Handler();
+    public MainActivity mainActivity;
 
-    public LightInterval(int frameRate, TextView txtLux) {
+    public LightInterval(int frameRate, MainActivity mainActivity) {
         this.frameRate = frameRate;
-        this.txtLux = txtLux;
         this.luxCollection = new ArrayList<Integer>();
+        this.mainActivity = mainActivity;
+
     }
 
     public void setFrameRate(int frameRate) {
@@ -46,10 +49,10 @@ public class LightInterval {
         synchronized public void run() {
             frame.removeCallbacks(frameUpdate);
             //code here
-
             if(luxCollection.size() > 0){
                 double mediana = Helper.median(luxCollection);
-                txtLux.setText(String.valueOf(mediana));
+                mainActivity.txtLux.setText(String.valueOf(mediana));
+                luxCollection = new ArrayList<Integer>();
             }
             frame.postDelayed(frameUpdate, frameRate);
         }

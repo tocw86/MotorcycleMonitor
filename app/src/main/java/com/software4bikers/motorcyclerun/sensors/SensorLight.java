@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.software4bikers.motorcyclerun.MainActivity;
@@ -19,7 +20,8 @@ public class SensorLight implements SensorEventListener {
     public SensorLight(MainActivity mainActivity, TextView txtLux) {
         this.context = mainActivity;
         this.txtLux = txtLux;
-        lightInterval = new LightInterval(3000, this.txtLux);
+        lightInterval = new LightInterval(3000, mainActivity);
+        lightInterval.start();
         sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
         Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -34,7 +36,8 @@ public class SensorLight implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT){
             lightInterval.luxCollection.add(Math.round(sensorEvent.values[0]));
-            txtLux.setText(String.valueOf(sensorEvent.values[0]));
+            //Log.d("xxx",String.valueOf(sensorEvent.values[0]));
+            //txtLux.setText(String.valueOf(sensorEvent.values[0]));
         }
     }
 

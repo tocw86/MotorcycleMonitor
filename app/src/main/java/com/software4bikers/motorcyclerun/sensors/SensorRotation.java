@@ -55,7 +55,7 @@ public class SensorRotation implements SensorEventListener {
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         );
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+        //sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -81,18 +81,19 @@ public class SensorRotation implements SensorEventListener {
                     azimuth = values[0] * 57.2957795f;
                     pitch =values[1] * 57.2957795f;
                     roll = rawRoll = Math.round(values[2] * 57.2957795f);
-                    if(calibrateRollValue != 0){
+                    /*if(calibrateRollValue != 0){
                         if(calibrateRollValue < 0){
                             roll = rawRoll - calibrateRollValue;
                         }else{
                             roll = rawRoll - calibrateRollValue;
                         }
-                    }
+                    }*/
                     mags = null;
                     accels = null;
                     if(roll != 0){
                         gameView.setRoll((int) roll);
-                        txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
+                        //txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
+                        txtRoll.setText(String.valueOf(roll));
                     }else{
                         txtRoll.setText("0° N");
 

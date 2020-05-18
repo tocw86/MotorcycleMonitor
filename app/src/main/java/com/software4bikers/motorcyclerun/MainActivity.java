@@ -121,12 +121,14 @@ public class MainActivity extends Activity {
         angleView = this.findViewById(R.id.angleView);
         txtRoll = this.findViewById(R.id.txtRoll);
         /*load from raw folder*/
-
         pseudo3dRoad.setBottom(gameView.getHeight());
+        Glide.with(this).load(R.drawable.road_pixelized_0).into(pseudo3dRoad);
         gameHeight = gameView.getHeight();
         cloud1Animation = new CloudAnimation(cloud1View, 4000);
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
+        bgDaylight = this.findViewById(R.id.bg_daylight);
         startGfx(new Handler());
+ 
     }
 
     private void setUpGfx(){
