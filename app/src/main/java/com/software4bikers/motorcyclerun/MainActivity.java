@@ -122,18 +122,41 @@ public class MainActivity extends Activity {
         txtRoll = this.findViewById(R.id.txtRoll);
         /*load from raw folder*/
 
-
         pseudo3dRoad.setBottom(gameView.getHeight());
         gameHeight = gameView.getHeight();
         cloud1Animation = new CloudAnimation(cloud1View, 4000);
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
         startGfx(new Handler());
-
-
     }
 
     private void setUpGfx(){
-        Helper.themeRefresh(this);
+        if (this.bgDaylight.getPaddingBottom() == 0) {
+            this.bgDaylight.setPadding(0, 0, 0, this.pseudo3dRoad.getHeight());
+        }
+        if (this.cloud3View.getPaddingTop() == 0) {
+            this.cloud3PosY = this.gameView.getHeight() / 3;
+            this.cloud3PosX = (int) (this.gameView.getWidth() * 0.7);
+            this.cloud3View.setPadding(this.cloud3PosX, this.cloud3PosY, 0, 0);
+            this.cloud3View.setVisibility(View.VISIBLE);
+
+            this.cloud2Animation.setLeft(this.cloud3PosX);
+            this.cloud2Animation.setTop(this.cloud3PosY);
+            this.cloud2Animation.setPosYChange(10);
+            this.cloud2Animation.start();
+
+        }
+        if (this.cloud1View.getPaddingTop() == 0) {
+            this.cloud1PosY = 140;
+            this.cloud1PosX = -25;
+            this.cloud1View.setPadding(this.cloud1PosX, this.cloud1PosY, 0, 0);
+            this.cloud1View.setVisibility(View.VISIBLE);
+
+            this.cloud1Animation.setLeft(this.cloud1PosX);
+            this.cloud1Animation.setTop(this.cloud1PosY);
+            this.cloud1Animation.setPosYChange(5);
+            this.cloud1Animation.start();
+        }
+
     }
 
     public void finish() {

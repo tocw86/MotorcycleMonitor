@@ -154,7 +154,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="0"
-            android:visibility="gone"
             android:layout_marginLeft="15dp"
             android:textColor="@color/black"
             android:fontFamily="@font/anton"

@@ -38,32 +38,6 @@ public class Helper {
         }
 
 
-        if (mainActivity.bgDaylight.getPaddingBottom() == 0) {
-            mainActivity.bgDaylight.setPadding(0, 0, 0, mainActivity.pseudo3dRoad.getHeight());
-        }
-        if (mainActivity.cloud3View.getPaddingTop() == 0) {
-            mainActivity.cloud3PosY = mainActivity.gameView.getHeight() / 3;
-            mainActivity.cloud3PosX = (int) (mainActivity.gameView.getWidth() * 0.7);
-            mainActivity.cloud3View.setPadding(mainActivity.cloud3PosX, mainActivity.cloud3PosY, 0, 0);
-            mainActivity.cloud3View.setVisibility(View.VISIBLE);
-
-            mainActivity.cloud2Animation.setLeft(mainActivity.cloud3PosX);
-            mainActivity.cloud2Animation.setTop(mainActivity.cloud3PosY);
-            mainActivity.cloud2Animation.setPosYChange(10);
-            mainActivity.cloud2Animation.start();
-
-        }
-        if (mainActivity.cloud1View.getPaddingTop() == 0) {
-            mainActivity.cloud1PosY = 140;
-            mainActivity.cloud1PosX = -25;
-            mainActivity.cloud1View.setPadding(mainActivity.cloud1PosX, mainActivity.cloud1PosY, 0, 0);
-            mainActivity.cloud1View.setVisibility(View.VISIBLE);
-
-            mainActivity.cloud1Animation.setLeft(mainActivity.cloud1PosX);
-            mainActivity.cloud1Animation.setTop(mainActivity.cloud1PosY);
-            mainActivity.cloud1Animation.setPosYChange(5);
-            mainActivity.cloud1Animation.start();
-        }
 
     }
 }
