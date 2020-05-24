@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
         sensorLocation = new SensorLocation(this, pseudo3dRoad);
-        sensorLight = new SensorLight(this, txtLux);
+        //sensorLight = new SensorLight(this, txtLux);
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
         bgDaylight = this.findViewById(R.id.bg_daylight);

@@ -58,9 +58,9 @@ public class SensorRotation implements SensorEventListener {
         //sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        gameView.setDay(context.isDay);
         switch (event.sensor.getType()) {
             case Sensor.TYPE_MAGNETIC_FIELD:
                 mags = lowPass(event.values.clone(), mags);
@@ -69,6 +69,10 @@ public class SensorRotation implements SensorEventListener {
                 accels = lowPass(event.values.clone(), accels);
                 break;
         }
+        long actualTime = event.timestamp;
+
+        if(actualTime - lastUpdate > 500000000) {
+
             if (mags != null && accels != null) {
                 gravity = new float[9];
                 magnetic = new float[9];
@@ -80,27 +84,32 @@ public class SensorRotation implements SensorEventListener {
                     values = lowPass(values, values);
                     azimuth = values[0] * 57.2957795f;
                     pitch =values[1] * 57.2957795f;
-                    roll = rawRoll = Math.round(values[2] * 57.2957795f);
-                    /*if(calibrateRollValue != 0){
+                    roll = Math.round(values[2] * 57.2957795f);
+              /*      if(calibrateRollValue != 0){
                         if(calibrateRollValue < 0){
                             roll = rawRoll - calibrateRollValue;
                         }else{
                             roll = rawRoll - calibrateRollValue;
                         }
                     }*/
+                    if(roll != 0 && (roll <= -5 || roll >= 5 )){
+                        gameView.setRoll((int) roll);
+                        txtRoll.setText(parseRoll(roll));
+                    }else{
+                        gameView.setRoll(0);
+                        txtRoll.setText("0° N");
+                    }
                     mags = null;
                     accels = null;
-                    if(roll != 0){
-                        gameView.setRoll((int) roll);
-                        //txtRoll.setText(this.parseRoll(gameView.getMaximumRoll()));
-                        txtRoll.setText(String.valueOf(roll));
-                    }else{
-                        txtRoll.setText("0° N");
-
-                    }
+                    lastUpdate = actualTime;
                 }
+
             }
+
+        }
+
     }
+
 
     private String parseRoll(float roll) {
         String side;

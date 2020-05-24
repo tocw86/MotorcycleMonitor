@@ -32,7 +32,7 @@ public class GameView  extends View {
     public int posY;
     public int maximumRoll = 0;
     public List<Integer> rollArray;
-    public boolean isDay;
+    public boolean isDay = true;
     private Handler frame = new Handler();
 
     public GameView(Context context, @Nullable AttributeSet attrs) {

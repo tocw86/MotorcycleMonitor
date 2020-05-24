@@ -149,6 +149,7 @@
             android:fontFamily="@font/anton"
             android:textSize="30sp" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
             android:id="@+id/txtLux"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
