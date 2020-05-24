@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -15,11 +16,17 @@ import androidx.annotation.Nullable;
 import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.views.GameView;
 
+import static java.lang.StrictMath.asin;
+import static java.lang.StrictMath.atan2;
+
 public class SensorRotation implements SensorEventListener {
 
     public MainActivity mainActivity;
     public GameView gameView;
     public TextView txtRoll;
+    public float roll;
+    public float pitch;
+    public float a = 0.1f;
     public interface Listener {
         void onOrientationChanged(float pitch, float roll);
     }
@@ -120,8 +127,15 @@ public class SensorRotation implements SensorEventListener {
         SensorManager.getOrientation(adjustedRotationMatrix, orientation);
 
         // Convert radians to degrees
-        float pitch = orientation[1] * -57;
-        float roll = orientation[2] * -57;
+
+        pitch = lowPass(orientation[1] * -57, pitch);
+        roll = lowPass(orientation[2] * -57, roll);
+
+        Log.d("xxxpitch", String.valueOf(pitch));
+
+        if(pitch <= -60){
+            roll = 0;
+        }
 
         if(roll != 0 && (roll <= -5 || roll >= 5 )){
             gameView.setRoll((int) roll);
@@ -132,6 +146,9 @@ public class SensorRotation implements SensorEventListener {
         }
 
         mListener.onOrientationChanged(pitch, roll);
+    }
+    public float lowPass(float current, float last){
+        return  last * (1.0f - a) + current * a;
     }
 
     private String parseRoll(float roll) {
