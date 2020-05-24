@@ -45,6 +45,7 @@
         <RelativeLayout
             android:id="@+id/weatherLayout"
             android:layout_width="match_parent"
+            android:layout_marginTop="100dp"
             android:gravity="end"
             android:layout_height="wrap_content">
         <ImageView
@@ -58,6 +59,7 @@
                 android:textColor="@color/black"
                 android:fontFamily="@font/anton"
                 android:layout_marginTop="-20dp"
+                android:layout_marginLeft="20dp"
                 android:textSize="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

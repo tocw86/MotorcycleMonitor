@@ -10,8 +10,6 @@ import android.os.Handler;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -21,13 +19,12 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 
 import com.software4bikers.motorcyclerun.animations.CloudAnimation;
-import com.software4bikers.motorcyclerun.helpers.Helper;
+import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
-import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.views.GameView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorRotation.Listener {
     public SensorRotation sensorRotation;
     public SensorLocation sensorLocation;
     public SensorLight sensorLight;
@@ -110,8 +107,11 @@ public class MainActivity extends Activity {
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
-        sensorRotation = new SensorRotation(this, gameView);
+        //sensorRotation = new SensorRotation(this, gameView);
+
         sensorLocation = new SensorLocation(this, pseudo3dRoad);
+        sensorRotation = new SensorRotation(this, gameView);
+        sensorRotation.startListening(this);
         //sensorLight = new SensorLight(this, txtLux);
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
@@ -152,7 +152,6 @@ public class MainActivity extends Activity {
             this.cloud1PosX = -25;
             this.cloud1View.setPadding(this.cloud1PosX, this.cloud1PosY, 0, 0);
             this.cloud1View.setVisibility(View.VISIBLE);
-
             this.cloud1Animation.setLeft(this.cloud1PosX);
             this.cloud1Animation.setTop(this.cloud1PosY);
             this.cloud1Animation.setPosYChange(5);
@@ -165,8 +164,8 @@ public class MainActivity extends Activity {
         super.finish();
         System.exit(0);
     }
+    @Override
+    public void onOrientationChanged(float pitch, float roll) {
 
-    public void calibrateSensors(View view) {
-        sensorRotation.calibrateSensors();
     }
 }

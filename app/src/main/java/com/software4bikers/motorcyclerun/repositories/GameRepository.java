@@ -27,7 +27,7 @@ public class GameRepository {
         }
         Matrix matrix = new Matrix();
         if(roll > 5 || roll < -5){
-            matrix.setRotate(roll, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
+            matrix.setRotate(roll * -1, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
         }else{
             matrix.setRotate(0, bitmapOrg.getWidth() /2, bitmapOrg.getHeight());
         }

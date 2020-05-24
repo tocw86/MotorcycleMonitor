@@ -1,115 +1,138 @@
 package com.software4bikers.motorcyclerun.sensors;
 
-import android.content.Context;
-import android.content.res.Resources;
+import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.TextView;
+import com.software4bikers.motorcyclerun.R;
+
+import androidx.annotation.Nullable;
 
 import com.software4bikers.motorcyclerun.MainActivity;
-import com.software4bikers.motorcyclerun.R;
 import com.software4bikers.motorcyclerun.views.GameView;
 
-import java.text.DecimalFormat;
-
 public class SensorRotation implements SensorEventListener {
-    static final float ALPHA = 0.25f;
-    public MainActivity context;
-    public SensorManager sensorManager;
-    public TextView txtRoll;
-    public TextView txtCalibrationVal;
-    public TextView txtRawRoll;
-    public int xMove;
-    // Gravity rotational data
-    private float[] gravity;
-    // Magnetic rotational data
-    private float[] magnetic; //for magnetic rotational data
-    private float[] accels = new float[3];
-    private float[] mags = new float[3];
-    private float[] values = new float[3];
 
-    // azimuth, pitch and roll
-    private float azimuth;
-    private float pitch;
-    private float roll;
-    private float rawRoll;
-    private float calibrateRollValue;
-    private long lastUpdate;
+    public MainActivity mainActivity;
     public GameView gameView;
-    public ImageView imageView;
-    public View bikerView;
-    public SensorRotation(MainActivity mainActivity, GameView gameView) {
-        lastUpdate = System.currentTimeMillis();
-        this.gameView = gameView;
-        context = mainActivity;
-        calibrateRollValue = 0;
-        bikerView = context.findViewById(R.id.biker_layout);
-        txtRoll = context.findViewById(R.id.txtRoll);
-        Resources res = context.getResources();
-        sensorManager = (SensorManager)  context.getSystemService(Context.SENSOR_SERVICE);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
-        );
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-        //sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+    public TextView txtRoll;
+    public interface Listener {
+        void onOrientationChanged(float pitch, float roll);
     }
 
+    private static final int SENSOR_DELAY_MICROS = 16 * 1000; // 16ms
+
+    private final WindowManager mWindowManager;
+
+    private final SensorManager mSensorManager;
+
+    @Nullable
+    private final Sensor mRotationSensor;
+
+    private int mLastAccuracy;
+    private Listener mListener;
+
+    public SensorRotation(MainActivity mainActivity, GameView gameView) {
+        mWindowManager = mainActivity.getWindow().getWindowManager();
+        mSensorManager = (SensorManager) mainActivity.getSystemService(Activity.SENSOR_SERVICE);
+        this.gameView = gameView;
+        this.txtRoll = mainActivity.findViewById(R.id.txtRoll);
+        // Can be null if the sensor hardware is not available
+        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+    }
+
+    public void startListening(Listener listener) {
+        if (mListener == listener) {
+            return;
+        }
+        mListener = listener;
+        if (mRotationSensor == null) {
+            return;
+        }
+        mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
+    }
+
+    public void stopListening() {
+        mSensorManager.unregisterListener(this);
+        mListener = null;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        if (mLastAccuracy != accuracy) {
+            mLastAccuracy = accuracy;
+        }
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-            case Sensor.TYPE_MAGNETIC_FIELD:
-                mags = lowPass(event.values.clone(), mags);
-                break;
-            case Sensor.TYPE_ACCELEROMETER:
-                accels = lowPass(event.values.clone(), accels);
-                break;
+        if (mListener == null) {
+            return;
         }
-        long actualTime = event.timestamp;
-
-        if(actualTime - lastUpdate > 500000000) {
-
-            if (mags != null && accels != null) {
-                gravity = new float[9];
-                magnetic = new float[9];
-                boolean success = SensorManager.getRotationMatrix(gravity, magnetic, accels, mags);
-                if (success) {
-                    float[] outGravity = new float[9];
-                    SensorManager.remapCoordinateSystem(gravity, SensorManager.AXIS_X,SensorManager.AXIS_Z, outGravity);
-                    SensorManager.getOrientation(outGravity, values);
-                    values = lowPass(values, values);
-                    azimuth = values[0] * 57.2957795f;
-                    pitch =values[1] * 57.2957795f;
-                    roll = Math.round(values[2] * 57.2957795f);
-              /*      if(calibrateRollValue != 0){
-                        if(calibrateRollValue < 0){
-                            roll = rawRoll - calibrateRollValue;
-                        }else{
-                            roll = rawRoll - calibrateRollValue;
-                        }
-                    }*/
-                    if(roll != 0 && (roll <= -5 || roll >= 5 )){
-                        gameView.setRoll((int) roll);
-                        txtRoll.setText(parseRoll(roll));
-                    }else{
-                        gameView.setRoll(0);
-                        txtRoll.setText("0° N");
-                    }
-                    mags = null;
-                    accels = null;
-                    lastUpdate = actualTime;
-                }
-
-            }
-
+        if (mLastAccuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
+            return;
         }
-
+        if (event.sensor == mRotationSensor) {
+            updateOrientation(event.values);
+        }
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
+    private void updateOrientation(float[] rotationVector) {
+        float[] rotationMatrix = new float[9];
+        SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector);
+
+        final int worldAxisForDeviceAxisX;
+        final int worldAxisForDeviceAxisY;
+
+        // Remap the axes as if the device screen was the instrument panel,
+        // and adjust the rotation matrix for the device orientation.
+        switch (mWindowManager.getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+            default:
+                worldAxisForDeviceAxisX = SensorManager.AXIS_X;
+                worldAxisForDeviceAxisY = SensorManager.AXIS_Z;
+                break;
+            case Surface.ROTATION_90:
+                worldAxisForDeviceAxisX = SensorManager.AXIS_Z;
+                worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_X;
+                break;
+            case Surface.ROTATION_180:
+                worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_X;
+                worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Z;
+                break;
+            case Surface.ROTATION_270:
+                worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Z;
+                worldAxisForDeviceAxisY = SensorManager.AXIS_X;
+                break;
+        }
+
+        float[] adjustedRotationMatrix = new float[9];
+        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX,
+                worldAxisForDeviceAxisY, adjustedRotationMatrix);
+
+        // Transform rotation matrix into azimuth/pitch/roll
+        float[] orientation = new float[3];
+        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+
+        // Convert radians to degrees
+        float pitch = orientation[1] * -57;
+        float roll = orientation[2] * -57;
+
+        if(roll != 0 && (roll <= -5 || roll >= 5 )){
+            gameView.setRoll((int) roll);
+            txtRoll.setText(parseRoll(roll));
+        }else{
+            gameView.setRoll(0);
+            txtRoll.setText("0° N");
+        }
+
+        mListener.onOrientationChanged(pitch, roll);
+    }
 
     private String parseRoll(float roll) {
         String side;
@@ -117,32 +140,11 @@ public class SensorRotation implements SensorEventListener {
         if(tmpRoll == 0){
             side = "";
         } else if(tmpRoll < 0){
-            side = "L";
+            side = "R";
             tmpRoll = tmpRoll * -1;
         }else{
-            side = "R";
+            side = "L";
         }
-       return tmpRoll + "°" + " " + side;
+        return tmpRoll + "°" + " " + side;
     }
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    public void calibrateSensors() {
-        calibrateRollValue = 0;
-        calibrateRollValue = rawRoll;
-        txtCalibrationVal.setText(String.valueOf(calibrateRollValue));
-    }
-
-    protected float[] lowPass( float[] input, float[] output ) {
-        if ( output == null ) return input;
-        for ( int i=0; i<input.length; i++ ) {
-            output[i] = output[i] + ALPHA * (input[i] - output[i]);
-        }
-        return output;
-    }
-
 }
