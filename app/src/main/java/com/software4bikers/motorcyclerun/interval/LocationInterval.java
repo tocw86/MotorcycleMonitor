@@ -20,6 +20,7 @@ import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 
 import java.text.DecimalFormat;
 
+import io.sentry.core.Sentry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -102,22 +103,23 @@ public class LocationInterval {
 
                         @Override
                         public void onResponse(Call<GeoWeatherResponse> call, Response<GeoWeatherResponse> response) {
-                            GeoWeatherResponse.Weather weather = response.body().getFirstItem();
-                            GeoWeatherResponse geoWeatherResponse = response.body();
-
-                            if(weather != null && String.valueOf(weather.icon) != null){
-                                Glide.with(sensorLocation.mainActivity).load("http://openweathermap.org/img/wn/"+weather.icon+"@2x.png").into(weatherIcon);
-                                weatherIcon.setVisibility(View.VISIBLE);
-                                //setPosition(weatherIcon);
-                               // setLayoutPosition(weatherLayout);
-                                long temp = Math.round(Double.parseDouble(geoWeatherResponse.main.temp));
-                                weatherText.setText(String.valueOf(temp) + " °C");
+                            if(response.isSuccessful()){
+                                GeoWeatherResponse geoWeatherResponse = response.body();
+                                GeoWeatherResponse.Weather weather = response.body().getFirstItem();
+                                if(weather != null && String.valueOf(weather.icon) != null){
+                                    Glide.with(sensorLocation.mainActivity).load("http://openweathermap.org/img/wn/"+weather.icon+"@2x.png").into(weatherIcon);
+                                    weatherIcon.setVisibility(View.VISIBLE);
+                                    //setPosition(weatherIcon);
+                                    // setLayoutPosition(weatherLayout);
+                                    long temp = Math.round(Double.parseDouble(geoWeatherResponse.main.temp));
+                                    weatherText.setText(String.valueOf(temp) + " °C");
+                                }
+                                lastLocation = new BikerLocation(sensorLocation.getBikerLocation().getLat(), sensorLocation.getBikerLocation().getLng());
                             }
-
-                            lastLocation = new BikerLocation(sensorLocation.getBikerLocation().getLat(), sensorLocation.getBikerLocation().getLng());
                         }
                         @Override
                         public void onFailure(Call<GeoWeatherResponse> call, Throwable t) {
+                            Sentry.captureException(t);
                         }
                     });
                 }
