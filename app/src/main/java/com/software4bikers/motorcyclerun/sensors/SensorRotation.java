@@ -84,7 +84,9 @@ public class SensorRotation implements SensorEventListener {
             return;
         }
         if (event.sensor == mRotationSensor) {
-            updateOrientation(event.values);
+            if(event.values.length > 0){
+                updateOrientation(event.values);
+            }
         }
     }
 
@@ -125,27 +127,27 @@ public class SensorRotation implements SensorEventListener {
         // Transform rotation matrix into azimuth/pitch/roll
         float[] orientation = new float[3];
         SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+        if(orientation.length > 0){
+            // Convert radians to degrees
 
-        // Convert radians to degrees
+            pitch = lowPass(orientation[1] * -57, pitch);
+            roll = lowPass(orientation[2] * -57, roll);
 
-        pitch = lowPass(orientation[1] * -57, pitch);
-        roll = lowPass(orientation[2] * -57, roll);
+            if(pitch <= -60){
+                roll = 0;
+            }
 
-        Log.d("xxxpitch", String.valueOf(pitch));
+            if(roll != 0 && (roll <= -5 || roll >= 5 )){
+                gameView.setRoll((int) roll);
+                txtRoll.setText(parseRoll(roll));
+            }else{
+                gameView.setRoll(0);
+                txtRoll.setText("0° N");
+            }
 
-        if(pitch <= -60){
-            roll = 0;
+            mListener.onOrientationChanged(pitch, roll);
         }
 
-        if(roll != 0 && (roll <= -5 || roll >= 5 )){
-            gameView.setRoll((int) roll);
-            txtRoll.setText(parseRoll(roll));
-        }else{
-            gameView.setRoll(0);
-            txtRoll.setText("0° N");
-        }
-
-        mListener.onOrientationChanged(pitch, roll);
     }
     public float lowPass(float current, float last){
         return  last * (1.0f - a) + current * a;

@@ -80,7 +80,7 @@ public class GameView  extends View {
 
     public void setRoll(int roll) {
         this.roll = roll;
-        rollArray.add(roll);
+       // rollArray.add(roll);
         invalidate();
         requestLayout();
     }

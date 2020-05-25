@@ -28,7 +28,11 @@ public class GeoWeatherResponse {
     public String cod;
 
     public Weather getFirstItem(){
-        return weather.get(0);
+        if(weather.size() > 0){
+            return weather.get(0);
+        }else{
+            return  null;
+        }
     }
 
     public class Weather {
