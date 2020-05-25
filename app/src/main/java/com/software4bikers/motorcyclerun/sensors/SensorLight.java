@@ -35,6 +35,8 @@ public class SensorLight implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT){
+            Log.d("xxxx", String.valueOf(Math.round(sensorEvent.values[0])));
+
             lightInterval.luxCollection.add(Math.round(sensorEvent.values[0]));
             //Log.d("xxx",String.valueOf(sensorEvent.values[0]));
             //txtLux.setText(String.valueOf(sensorEvent.values[0]));

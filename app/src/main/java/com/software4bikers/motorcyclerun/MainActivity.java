@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 
 import com.software4bikers.motorcyclerun.animations.CloudAnimation;
+import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     public TextView txtCurrentSpeed;
     public TextView txtSpeedLabel;
     public TextView txtRoll;
+    public TextView weatherText;
     public boolean isDay = true;
     public int cloud3PosY;
     public int cloud3PosX;
@@ -104,6 +106,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
 
     public void startApp() {
         txtLux = this.findViewById(R.id.txtLux);
+        weatherText = this.findViewById(R.id.weatherText);
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
@@ -112,7 +115,8 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
         sensorLocation = new SensorLocation(this, pseudo3dRoad);
         sensorRotation = new SensorRotation(this, gameView);
         sensorRotation.startListening(this);
-        //sensorLight = new SensorLight(this, txtLux);
+        sensorLight = new SensorLight(this, txtLux);
+
         cloud3View = this.findViewById(R.id.cloud3);
         cloud1View = this.findViewById(R.id.cloud1);
         bgDaylight = this.findViewById(R.id.bg_daylight);
@@ -133,7 +137,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
 
     private void setUpGfx(){
         if (this.bgDaylight.getPaddingBottom() == 0) {
-            this.bgDaylight.setPadding(0, 0, 0, this.pseudo3dRoad.getHeight());
+            this.bgDaylight.setPadding(0, 0, 0, this.pseudo3dRoad.getHeight() - 10);
         }
         if (this.cloud3View.getPaddingTop() == 0) {
             this.cloud3PosY = this.gameView.getHeight() / 3;
@@ -157,6 +161,9 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
             this.cloud1Animation.setPosYChange(5);
             this.cloud1Animation.start();
         }
+
+        Helper.themeRefresh(this);
+
 
     }
 

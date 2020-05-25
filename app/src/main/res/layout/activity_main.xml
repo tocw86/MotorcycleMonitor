@@ -45,13 +45,12 @@
         <RelativeLayout
             android:id="@+id/weatherLayout"
             android:layout_width="match_parent"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="150dp"
             android:gravity="end"
             android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/weather_icon"
             android:layout_width="100dp"
-            android:layout_marginLeft="0dp"
             android:layout_height="wrap_content"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_below="@+id/weather_icon"

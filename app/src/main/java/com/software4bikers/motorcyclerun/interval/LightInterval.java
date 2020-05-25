@@ -1,6 +1,7 @@
 package com.software4bikers.motorcyclerun.interval;
 
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.software4bikers.motorcyclerun.MainActivity;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class LightInterval {
     public int frameRate;
-    public List<Integer> luxCollection;
+    public ArrayList<Integer> luxCollection;
     public TextView txtLux;
     private Handler frame = new Handler();
     public MainActivity mainActivity;
@@ -50,8 +51,15 @@ public class LightInterval {
             frame.removeCallbacks(frameUpdate);
             //code here
             if(luxCollection.size() > 0){
-                double mediana = Helper.median(luxCollection);
-                mainActivity.txtLux.setText(String.valueOf(mediana));
+                double mediana = Helper.getMedian(luxCollection);
+                Log.d("xxxx", String.valueOf(mediana));
+                if(mediana <= 50){
+                    mainActivity.isDay = false;
+                    Helper.themeRefresh(mainActivity);
+                }else{
+                    mainActivity.isDay = true;
+                    Helper.themeRefresh(mainActivity);
+                }
                 luxCollection = new ArrayList<Integer>();
             }
             frame.postDelayed(frameUpdate, frameRate);

@@ -40,7 +40,7 @@ public class SensorLocation implements LocationListener {
     public SpeedInterval speedInterval;
     public LocationInterval locationInterval;
     public int globalCurrentSpeed = 0;
-    public List<Integer> speedCollection = new ArrayList<Integer>();
+    public ArrayList<Integer> speedCollection = new ArrayList<Integer>();
     public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
