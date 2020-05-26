@@ -52,8 +52,7 @@ public class LightInterval {
             //code here
             if(luxCollection.size() > 0){
                 double mediana = Helper.getMedian(luxCollection);
-                Log.d("xxxx", String.valueOf(mediana));
-                if(mediana <= 50){
+                if(mediana <= 100){
                     mainActivity.isDay = false;
                     Helper.themeRefresh(mainActivity);
                 }else{
