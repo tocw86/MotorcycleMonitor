@@ -2,12 +2,15 @@ package com.software4bikers.motorcyclerun;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
 
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,10 +22,12 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 
 import com.software4bikers.motorcyclerun.animations.CloudAnimation;
+import com.software4bikers.motorcyclerun.app.App;
 import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 import com.software4bikers.motorcyclerun.views.GameView;
 
 public class MainActivity extends Activity implements SensorRotation.Listener {
@@ -105,6 +110,13 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     }
 
     public void startApp() {
+        String userId = ((App) getApplication()).getUserMenager().getUserId();
+
+        if(!userId.isEmpty()){
+            RunSessionModel runSessionModel = new RunSessionModel(this);
+            runSessionModel.create(userId, Helper.getDateTime(), Helper.getDateTime());
+        }
+
         txtLux = this.findViewById(R.id.txtLux);
         weatherText = this.findViewById(R.id.weatherText);
         rootLayout = this.findViewById(R.id.root_layout);
@@ -132,7 +144,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
         cloud2Animation = new CloudAnimation(cloud3View, 3000);
         bgDaylight = this.findViewById(R.id.bg_daylight);
         startGfx(new Handler());
- 
+
     }
 
     private void setUpGfx(){

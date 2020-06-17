@@ -112,7 +112,7 @@ public class LocationInterval {
                                     //setPosition(weatherIcon);
                                     // setLayoutPosition(weatherLayout);
                                     long temp = Math.round(Double.parseDouble(geoWeatherResponse.main.temp));
-                                    weatherText.setText(String.valueOf(temp) + " °C");
+                                    weatherText.setText(temp + " °C");
                                 }
                                 lastLocation = new BikerLocation(sensorLocation.getBikerLocation().getLat(), sensorLocation.getBikerLocation().getLng());
                             }
