@@ -70,16 +70,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
-        if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) > 22) {
-            if (!hasPermissions(this, PERMISSIONS)) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-            } else {
-                startApp();
-            }
-        } else {
-            startApp();
-        }
+        startApp();
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
