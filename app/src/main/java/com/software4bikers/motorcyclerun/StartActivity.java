@@ -8,10 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-public class StartActivity extends AppCompatActivity {
+import com.software4bikers.motorcyclerun.sensors.SensorRotation;
+import com.software4bikers.motorcyclerun.sensors.SensorRotationCalibrate;
+
+public class StartActivity extends AppCompatActivity implements SensorRotationCalibrate.Listener {
     int PERMISSION_ALL = 1;
+    private int calibrateValue = 0;
+    public SensorRotationCalibrate sensorRotation;
     boolean startApp = false;
     String[] PERMISSIONS = {
             Manifest.permission.INTERNET,
@@ -35,11 +42,17 @@ public class StartActivity extends AppCompatActivity {
         } else {
             startApp = true;
         }
+
+        sensorRotation = new SensorRotationCalibrate(this);
+        sensorRotation.startListening(this);
     }
 
     public void startMainActivity(View view) {
         if(startApp){
+            sensorRotation.unregister();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+            intent.putExtra("calibrateValue", String.valueOf(this.calibrateValue));
             startActivity(intent);
             finish();
             return;
@@ -55,5 +68,25 @@ public class StartActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    public void exitApplication(View view) {
+        StartActivity.this.finish();
+        System.exit(0);
+    }
+
+    public void setCalibrate(View view) {
+        this.calibrateValue = sensorRotation.getRoll();
+        Toast.makeText(this, "Calibrated", Toast.LENGTH_LONG).show();;
+    }
+
+    @Override
+    public void onOrientationChanged(float pitch, float roll) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

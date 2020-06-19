@@ -5,30 +5,32 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.software4bikers.motorcyclerun.R;
 
 import androidx.annotation.Nullable;
 
 import com.software4bikers.motorcyclerun.MainActivity;
+import com.software4bikers.motorcyclerun.StartActivity;
 import com.software4bikers.motorcyclerun.views.GameView;
 
-import static java.lang.StrictMath.asin;
-import static java.lang.StrictMath.atan2;
+public class SensorRotationCalibrate implements SensorEventListener {
 
-public class SensorRotation implements SensorEventListener {
-
-    public MainActivity mainActivity;
-    public GameView gameView;
-    public TextView txtRoll;
-    public int calibrateValue = 0;
+    public StartActivity startActivity;
+    public TextView calibrateRollValue;
     public float roll;
     public float pitch;
     public float a = 0.1f;
+
+    public int getRoll() {
+        return (int) roll;
+    }
+
+    public void unregister() {
+        mSensorManager.unregisterListener(this);
+    }
 
     public interface Listener {
         void onOrientationChanged(float pitch, float roll);
@@ -44,22 +46,19 @@ public class SensorRotation implements SensorEventListener {
     private final Sensor mRotationSensor;
 
     private int mLastAccuracy;
-    private Listener mListener;
+    private SensorRotationCalibrate.Listener mListener;
 
-    public SensorRotation(MainActivity mainActivity, GameView gameView) {
-        mWindowManager = mainActivity.getWindow().getWindowManager();
-        mSensorManager = (SensorManager) mainActivity.getSystemService(Activity.SENSOR_SERVICE);
-        this.gameView = gameView;
-        this.txtRoll = mainActivity.findViewById(R.id.txtRoll);
+
+    public SensorRotationCalibrate(StartActivity startActivity) {
+        this.startActivity = startActivity;
+        mWindowManager =  this.startActivity.getWindow().getWindowManager();
+        this.calibrateRollValue = this.startActivity.findViewById(R.id.calibrateRollValue);
+        mSensorManager = (SensorManager)  this.startActivity.getSystemService(Activity.SENSOR_SERVICE);
         // Can be null if the sensor hardware is not available
         mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
     }
 
-    public void setCalibrateValue(int calibrateValue) {
-        this.calibrateValue = calibrateValue;
-    }
-
-    public void startListening(Listener listener) {
+    public void startListening(SensorRotationCalibrate.Listener listener) {
         if (mListener == listener) {
             return;
         }
@@ -91,7 +90,7 @@ public class SensorRotation implements SensorEventListener {
             return;
         }
         if (event.sensor == mRotationSensor) {
-            if (event.values.length > 0) {
+            if(event.values.length > 0){
                 updateOrientation(event.values);
             }
         }
@@ -134,48 +133,21 @@ public class SensorRotation implements SensorEventListener {
         // Transform rotation matrix into azimuth/pitch/roll
         float[] orientation = new float[3];
         SensorManager.getOrientation(adjustedRotationMatrix, orientation);
-        if (orientation.length > 0) {
+        if(orientation.length > 0){
             // Convert radians to degrees
 
             pitch = lowPass(orientation[1] * -57, pitch);
             roll = lowPass(orientation[2] * -57, roll);
 
-            if (pitch <= -60) {
-                roll = 0;
-            }
+            int rollRounded = (int) roll;
 
-            int tempRoll = (int) roll;
+            calibrateRollValue.setText(String.valueOf(rollRounded));
 
-            if (this.calibrateValue != 0) {
-                tempRoll = tempRoll - this.calibrateValue;
-            }
-
-            if(tempRoll !=0 && tempRoll < -3 || tempRoll > 3){
-                gameView.setRoll(tempRoll);
-                txtRoll.setText(parseRoll(tempRoll));
-            }else{
-                gameView.setRoll(0);
-                txtRoll.setText("0° N");
-            }
             mListener.onOrientationChanged(pitch, roll);
         }
 
     }
-
-    public float lowPass(float current, float last) {
-        return last * (1.0f - a) + current * a;
-    }
-
-    private String parseRoll(int tmpRoll) {
-        String side;
-        if (tmpRoll == 0) {
-            side = "";
-        } else if (tmpRoll < 0) {
-            side = "R";
-            tmpRoll = tmpRoll * -1;
-        } else {
-            side = "L";
-        }
-        return tmpRoll + "°" + " " + side;
+    public float lowPass(float current, float last){
+        return  last * (1.0f - a) + current * a;
     }
 }
