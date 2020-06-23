@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     public int cloud3PosX;
     public int cloud1PosY;
     public int cloud1PosX;
+    public long sessionId;
 
     public CloudAnimation cloud1Animation;
     public CloudAnimation cloud2Animation;
@@ -105,7 +106,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
 
         if(!userId.isEmpty()){
             RunSessionModel runSessionModel = new RunSessionModel(this);
-            runSessionModel.create(userId, Helper.getDateTime(), Helper.getDateTime());
+            this.sessionId = runSessionModel.create(userId, Helper.getDateTime(), Helper.getDateTime());
         }
 
         txtLux = this.findViewById(R.id.txtLux);

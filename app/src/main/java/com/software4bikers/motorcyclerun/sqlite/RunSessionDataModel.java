@@ -7,19 +7,19 @@ import android.provider.BaseColumns;
 
 import com.software4bikers.motorcyclerun.helpers.DbHelper;
 
-public class RunSessionModel {
+public class RunSessionDataModel {
 
     private Context context;
     private DbHelper dbHelper;
     private  SQLiteDatabase db;
 
-    public RunSessionModel(Context context){
+    public RunSessionDataModel(Context context){
         this.context = context;
         this.dbHelper = new DbHelper(this.context);
         this.db = this.dbHelper.getWritableDatabase();
     }
 
-    public long create(String userId, String createdAt, String updatedAt){
+  /*  public void create(String userId, String createdAt, String updatedAt){
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(RunSessionModel.RunSession.COLUMN_NAME_USER_ID, userId);
@@ -27,12 +27,17 @@ public class RunSessionModel {
         values.put(RunSessionModel.RunSession.COLUMN_NAME_UPDATED_AT, updatedAt);
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(RunSessionModel.RunSession.TABLE_NAME, null, values);
-        return newRowId;
-    }
+    }*/
 
-    public static class RunSession implements BaseColumns {
-        public static final String TABLE_NAME = "run_sessions";
+    public static class RunSessionData implements BaseColumns {
+        public static final String TABLE_NAME = "run_sessions_data";
+        public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_USER_ID = "user_id";
+        public static final String COLUMN_NAME_SESSION_ID = "session_id";
+        public static final String COLUMN_NAME_LAT = "lat";
+        public static final String COLUMN_NAME_LON = "lon";
+        public static final String COLUMN_NAME_ELE = "ele";
+        public static final String COLUMN_NAME_ROLL = "roll";
         public static final String COLUMN_NAME_CREATED_AT = "created_at";
         public static final String COLUMN_NAME_UPDATED_AT = "updated_at";
     }
