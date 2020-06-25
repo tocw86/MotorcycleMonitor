@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.software4bikers.motorcyclerun.sqlite.RunSessionDataModel;
 import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -14,16 +15,33 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Software4BikersSchema.db";
 
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_ENTRIES_RUN_SESSION =
             "CREATE TABLE " + RunSessionModel.RunSession.TABLE_NAME + " (" +
                     RunSessionModel.RunSession._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     RunSessionModel.RunSession.COLUMN_NAME_USER_ID + " TEXT DEFAULT NULL," +
                     RunSessionModel.RunSession.COLUMN_NAME_CREATED_AT + " TEXT DEFAULT NULL," +
                     RunSessionModel.RunSession.COLUMN_NAME_UPDATED_AT + " TEXT DEFAULT NULL)";
 
-    private static final String SQL_DELETE_ENTRIES =
+    private static final String SQL_CREATE_ENTRIES_RUN_SESSION_DATA =
+            "CREATE TABLE " + RunSessionDataModel.RunSessionData.TABLE_NAME + " (" +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_USER_ID + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_SESSION_ID + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_LAT + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_LON + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_ELE + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_ROLL + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_SPEED + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_CREATED_AT + " TEXT DEFAULT NULL," +
+                    RunSessionDataModel.RunSessionData.COLUMN_NAME_UPDATED_AT + " TEXT DEFAULT NULL)";
+
+    private static final String SQL_DELETE_ENTRIES_RUN_SESSION =
             "DROP TABLE IF EXISTS " +  RunSessionModel.RunSession.TABLE_NAME;
 
+
+
+    private static final String SQL_DELETE_ENTRIES_RUN_SESSION_DATA =
+            "DROP TABLE IF EXISTS " +  RunSessionDataModel.RunSessionData.TABLE_NAME;
 
 
     public DbHelper(@Nullable Context context) {
@@ -31,12 +49,15 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+
+        db.execSQL(SQL_CREATE_ENTRIES_RUN_SESSION);
+        db.execSQL(SQL_CREATE_ENTRIES_RUN_SESSION_DATA);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_ENTRIES_RUN_SESSION);
+        db.execSQL(SQL_DELETE_ENTRIES_RUN_SESSION_DATA);
         onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

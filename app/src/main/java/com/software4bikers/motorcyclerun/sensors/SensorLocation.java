@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.interval.LocationInterval;
 import com.software4bikers.motorcyclerun.interval.SpeedInterval;
 import com.software4bikers.motorcyclerun.listeners.GpsListener;
@@ -22,6 +23,8 @@ import com.software4bikers.motorcyclerun.models.BikerLocation;
 import com.software4bikers.motorcyclerun.models.CLocation;
 import com.software4bikers.motorcyclerun.MainActivity;
 import com.software4bikers.motorcyclerun.R;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionDataModel;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -41,11 +44,14 @@ public class SensorLocation implements LocationListener {
     public LocationInterval locationInterval;
     public int globalCurrentSpeed = 0;
     public ArrayList<Integer> speedCollection = new ArrayList<Integer>();
-    public SensorLocation(MainActivity context, ImageView pseudo3dRoad) {
+    public RunSessionDataModel runSessionDataModel;
+    private String actualSpeed;
+    public SensorLocation(MainActivity context, ImageView pseudo3dRoad, RunSessionDataModel runSessionDataModel) {
         mainActivity = context;
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
         txtCurrentSpeed = mainActivity.findViewById(R.id.txtCurrentSpeed);
         this.pseudo3dRoad = pseudo3dRoad;
+        this.runSessionDataModel = runSessionDataModel;
 
         if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -88,6 +94,7 @@ public class SensorLocation implements LocationListener {
         locationInterval.start();
     }
 
+
     public BikerLocation getBikerLocation() {
         return bikerLocation;
     }
@@ -101,6 +108,9 @@ public class SensorLocation implements LocationListener {
             CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
             bikerLocation = new BikerLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+            String ele = String.valueOf(location.getAltitude());
+            String tempRoll = String.valueOf(this.mainActivity.sensorRotation.getTempRoll());
+            this.runSessionDataModel.create(this.mainActivity.userId, String.valueOf(this.mainActivity.sessionId), bikerLocation.getLat(), bikerLocation.getLng(), ele, tempRoll, this.actualSpeed ,Helper.getDateTime(), Helper.getDateTime());
         }
     }
 
@@ -169,7 +179,8 @@ public class SensorLocation implements LocationListener {
         if((int) nCurrentSpeed > 0){
             this.speedCollection.add((int) nCurrentSpeed);
         }
-        this.txtCurrentSpeed.setText(String.valueOf(Math.round(nCurrentSpeed)));
+         this.actualSpeed = String.valueOf(Math.round(nCurrentSpeed));
+         this.txtCurrentSpeed.setText(this.actualSpeed);
     }
 
 }
