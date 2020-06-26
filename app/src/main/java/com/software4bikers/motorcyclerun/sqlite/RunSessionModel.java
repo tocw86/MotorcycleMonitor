@@ -19,7 +19,7 @@ public class RunSessionModel {
         this.db = this.dbHelper.getWritableDatabase();
     }
 
-    public void create(String userId, String createdAt, String updatedAt){
+    public long create(String userId, String createdAt, String updatedAt){
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(RunSessionModel.RunSession.COLUMN_NAME_USER_ID, userId);
@@ -27,6 +27,7 @@ public class RunSessionModel {
         values.put(RunSessionModel.RunSession.COLUMN_NAME_UPDATED_AT, updatedAt);
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(RunSessionModel.RunSession.TABLE_NAME, null, values);
+        return newRowId;
     }
 
     public static class RunSession implements BaseColumns {

@@ -152,4 +152,5 @@ public class GameView  extends View {
             frame.postDelayed(frameUpdate, 1000);
         }
     };
+
 }

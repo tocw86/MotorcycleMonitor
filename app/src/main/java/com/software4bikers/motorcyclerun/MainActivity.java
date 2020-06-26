@@ -27,6 +27,7 @@ import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.sensors.SensorRotation;
 import com.software4bikers.motorcyclerun.sensors.SensorLight;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionDataModel;
 import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 import com.software4bikers.motorcyclerun.views.GameView;
 
@@ -52,7 +53,8 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     public int cloud3PosX;
     public int cloud1PosY;
     public int cloud1PosX;
-
+    public long sessionId;
+    public String userId;
     public CloudAnimation cloud1Animation;
     public CloudAnimation cloud2Animation;
 
@@ -101,28 +103,27 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     }
 
     public void startApp() {
-        String userId = ((App) getApplication()).getUserMenager().getUserId();
+        this.userId = ((App) getApplication()).getUserMenager().getUserId();
 
-        if(!userId.isEmpty()){
+        if(!this.userId.isEmpty()){
             RunSessionModel runSessionModel = new RunSessionModel(this);
-            runSessionModel.create(userId, Helper.getDateTime(), Helper.getDateTime());
+            this.sessionId = runSessionModel.create(userId, Helper.getDateTime(), Helper.getDateTime());
         }
+
+        RunSessionDataModel runSessionDataModel = new RunSessionDataModel(this);
 
         txtLux = this.findViewById(R.id.txtLux);
         weatherText = this.findViewById(R.id.weatherText);
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
-        //sensorRotation = new SensorRotation(this, gameView);
 
         Bundle extras = getIntent().getExtras();
         String calibrateValueString =  extras.getString("calibrateValue");
 
-        sensorLocation = new SensorLocation(this, pseudo3dRoad);
+        sensorLocation = new SensorLocation(this, pseudo3dRoad, runSessionDataModel);
         sensorRotation = new SensorRotation(this, gameView);
         if(calibrateValueString != null && !calibrateValueString.isEmpty()){
-            Log.d("zzzz", calibrateValueString);
-
             sensorRotation.setCalibrateValue(Integer.parseInt(calibrateValueString));
         }
         sensorRotation.startListening(this);

@@ -29,6 +29,12 @@ public class SensorRotation implements SensorEventListener {
     public float roll;
     public float pitch;
     public float a = 0.1f;
+    private int tempRoll;
+
+    public int getTempRoll() {
+        return this.tempRoll;
+    }
+
 
     public interface Listener {
         void onOrientationChanged(float pitch, float roll);
@@ -150,6 +156,8 @@ public class SensorRotation implements SensorEventListener {
                 tempRoll = tempRoll - this.calibrateValue;
             }
 
+            this.tempRoll = tempRoll;
+
             if(tempRoll !=0 && tempRoll < -3 || tempRoll > 3){
                 gameView.setRoll(tempRoll);
                 txtRoll.setText(parseRoll(tempRoll));
@@ -157,6 +165,8 @@ public class SensorRotation implements SensorEventListener {
                 gameView.setRoll(0);
                 txtRoll.setText("0° N");
             }
+
+
             mListener.onOrientationChanged(pitch, roll);
         }
 
