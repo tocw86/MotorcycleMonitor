@@ -8,4 +8,25 @@
     <color name="red">#E60000</color>
     <color name="green">#008000</color>
     <color name="yellow">#ffef00</color>
+
+
+    <color name="purple_200">#fdd835</color> <!--Color primary (dark)-->
+    <color name="purple_500">#484848</color> <!--Color primary (light)-->
+    <color name="purple_600">#152D48</color> <!--Color primary variant (dark)-->
+    <color name="purple_700">#0D233A</color> <!--Color primary variant (light)-->
+
+    <color name="green_200">#fdd835</color> <!--Color secondary-->
+    <color name="green_500">#c6a700</color> <!--Color secondary variant-->
+
+    <color name="red_200">#cf6679</color> <!--Color error (dark)-->
+    <color name="red_600">#b00020</color> <!--Color error (light)-->
+
+    <!--Color surface (light), color on error (light), -->
+    <!--color on surface (dark), color on surface (dark)-->
+    <color name="white_50">#ffffff</color>
+
+    <color name="black_800">#121212</color> <!--Color surface (dark)-->
+    <!--Color on secondary (light), color on background (light),-->
+    <!--color on surface (light)-->
+    <color name="black_900">#000000</color>
 </resources>
