@@ -94,7 +94,6 @@ public class SensorLocation implements LocationListener {
         locationInterval.start();
     }
 
-
     public BikerLocation getBikerLocation() {
         return bikerLocation;
     }

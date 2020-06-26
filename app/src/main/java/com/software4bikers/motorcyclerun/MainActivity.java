@@ -117,7 +117,6 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
         rootLayout = this.findViewById(R.id.root_layout);
         gameView = this.findViewById(R.id.gameId);
         pseudo3dRoad = this.findViewById(R.id.pseudo3dRoad);
-        //sensorRotation = new SensorRotation(this, gameView);
 
         Bundle extras = getIntent().getExtras();
         String calibrateValueString =  extras.getString("calibrateValue");
@@ -125,8 +124,6 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
         sensorLocation = new SensorLocation(this, pseudo3dRoad, runSessionDataModel);
         sensorRotation = new SensorRotation(this, gameView);
         if(calibrateValueString != null && !calibrateValueString.isEmpty()){
-            Log.d("zzzz", calibrateValueString);
-
             sensorRotation.setCalibrateValue(Integer.parseInt(calibrateValueString));
         }
         sensorRotation.startListening(this);

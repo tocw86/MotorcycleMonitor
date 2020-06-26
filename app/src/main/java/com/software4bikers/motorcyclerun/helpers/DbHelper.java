@@ -13,7 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Software4BikersSchema.db";
+    public static final String DATABASE_NAME = "s4b.db";
 
     private static final String SQL_CREATE_ENTRIES_RUN_SESSION =
             "CREATE TABLE " + RunSessionModel.RunSession.TABLE_NAME + " (" +
