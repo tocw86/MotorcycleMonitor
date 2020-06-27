@@ -36,6 +36,7 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
         if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) > 22) {
             if (!hasPermissions(this, PERMISSIONS)) {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+                startApp = true;
             } else {
                 startApp = true;
             }
@@ -48,10 +49,10 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
     }
 
     public void startMainActivity(View view) {
+        Log.d("xxxx", String.valueOf(startApp));
         if(startApp){
             sensorRotation.unregister();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
             intent.putExtra("calibrateValue", String.valueOf(this.calibrateValue));
             startActivity(intent);
             finish();

@@ -32,7 +32,7 @@ public class RunSessionDataModel {
         values.put(RunSessionDataModel.RunSessionData.COLUMN_NAME_CREATED_AT, createdAt);
         values.put(RunSessionDataModel.RunSessionData.COLUMN_NAME_UPDATED_AT, updatedAt);
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(RunSessionModel.RunSession.TABLE_NAME, null, values);
+        long newRowId = db.insert(RunSessionDataModel.RunSessionData.TABLE_NAME, null, values);
     }
 
     public static class RunSessionData implements BaseColumns {

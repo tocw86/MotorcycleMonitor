@@ -22,7 +22,6 @@
             android:layout_height="wrap_content">
         </TextView>
         <Button
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_marginTop="100dp"
             android:id="@+id/startButton"
             android:text="Start"

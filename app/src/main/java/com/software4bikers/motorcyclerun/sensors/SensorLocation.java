@@ -106,10 +106,12 @@ public class SensorLocation implements LocationListener {
         if(location != null){
             CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
-            bikerLocation = new BikerLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-            String ele = String.valueOf(location.getAltitude());
-            String tempRoll = String.valueOf(this.mainActivity.sensorRotation.getTempRoll());
-            this.runSessionDataModel.create(this.mainActivity.userId, String.valueOf(this.mainActivity.sessionId), bikerLocation.getLat(), bikerLocation.getLng(), ele, tempRoll, this.actualSpeed ,Helper.getDateTime(), Helper.getDateTime());
+            if(Integer.parseInt(this.actualSpeed) > 0) {
+                bikerLocation = new BikerLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                String ele = String.valueOf(location.getAltitude());
+                String tempRoll = String.valueOf(this.mainActivity.sensorRotation.getTempRoll());
+                this.runSessionDataModel.create(this.mainActivity.userId, String.valueOf(this.mainActivity.sessionId), bikerLocation.getLat(), bikerLocation.getLng(), ele, tempRoll, this.actualSpeed ,Helper.getDateTime(), Helper.getDateTime());
+            }
         }
     }
 
