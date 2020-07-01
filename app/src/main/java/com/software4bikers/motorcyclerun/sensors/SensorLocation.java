@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.interval.LocationInterval;
 import com.software4bikers.motorcyclerun.interval.SpeedInterval;
+import com.software4bikers.motorcyclerun.interval.SqlInterval;
 import com.software4bikers.motorcyclerun.listeners.GpsListener;
 import com.software4bikers.motorcyclerun.models.BikerLocation;
 import com.software4bikers.motorcyclerun.models.CLocation;
@@ -42,6 +43,8 @@ public class SensorLocation implements LocationListener {
     public BikerLocation bikerLocation;
     public SpeedInterval speedInterval;
     public LocationInterval locationInterval;
+    public SqlInterval sqlInterval;
+    private Location actualLocation;
     public int globalCurrentSpeed = 0;
     public ArrayList<Integer> speedCollection = new ArrayList<Integer>();
     public RunSessionDataModel runSessionDataModel;
@@ -92,25 +95,35 @@ public class SensorLocation implements LocationListener {
         speedInterval = new SpeedInterval(this, 3000);
         locationInterval = new LocationInterval(this, 3000);
         locationInterval.start();
+
+        sqlInterval = new SqlInterval(this, 1000);
+        sqlInterval.start();
     }
 
     public BikerLocation getBikerLocation() {
         return bikerLocation;
     }
-
+public boolean hasActualLocation(){
+    return this.actualLocation != null;
+}
+public String getActualSpeed(){
+        return  this.actualSpeed;
+}
+public Location getActualLocation(){
+    return this.actualLocation;
+}
     @Override
     public void onLocationChanged(Location location) {
 
         txtCurrentSpeed.setText("0");
+        this.actualLocation = location;
 
         if(location != null){
             CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
+             
             if(Integer.parseInt(this.actualSpeed) > 0) {
-                bikerLocation = new BikerLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-                String ele = String.valueOf(location.getAltitude());
-                String tempRoll = String.valueOf(this.mainActivity.sensorRotation.getTempRoll());
-                this.runSessionDataModel.create(this.mainActivity.userId, String.valueOf(this.mainActivity.sessionId), bikerLocation.getLat(), bikerLocation.getLng(), ele, tempRoll, this.actualSpeed ,Helper.getDateTime(), Helper.getDateTime());
+               
             }
         }
     }
