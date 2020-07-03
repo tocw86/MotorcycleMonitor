@@ -12,31 +12,29 @@
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/AppTheme">
+        <activity android:name=".GpxActivity"></activity>
         <activity
             android:name=".StartActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="io.sentry.dsn"
             android:value="https://21a3ab80b1944b1987516fd0d19a1af1@o380669.ingest.sentry.io/5206804" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
         android:required="true" />
@@ -46,15 +44,16 @@
     <uses-feature
         android:name="android.hardware.sensor.light"
         android:required="true" />
+
     <uses-feature
         android:name="android.hardware.sensor.compass"
         android:required="true" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

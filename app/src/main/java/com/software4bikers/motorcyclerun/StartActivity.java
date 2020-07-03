@@ -90,4 +90,11 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+    public void startHistoryActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), GpxActivity.class);
+        startActivity(intent);
+        finish();
+        return;
+    }
 }
