@@ -148,9 +148,6 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
     }
 
     private void setUpGfx(){
-        if (this.bgDaylight.getPaddingBottom() == 0) {
-            this.bgDaylight.setPadding(0, 0, 0, this.pseudo3dRoad.getHeight() - 10);
-        }
         if (this.cloud3View.getPaddingTop() == 0) {
             this.cloud3PosY = this.gameView.getHeight() / 3;
             this.cloud3PosX = (int) (this.gameView.getWidth() * 0.7);
@@ -161,7 +158,6 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
             this.cloud2Animation.setTop(this.cloud3PosY);
             this.cloud2Animation.setPosYChange(10);
             this.cloud2Animation.start();
-
         }
         if (this.cloud1View.getPaddingTop() == 0) {
             this.cloud1PosY = 140;
@@ -173,10 +169,7 @@ public class MainActivity extends Activity implements SensorRotation.Listener {
             this.cloud1Animation.setPosYChange(5);
             this.cloud1Animation.start();
         }
-
         Helper.themeRefresh(this);
-
-
     }
 
     public void finish() {
