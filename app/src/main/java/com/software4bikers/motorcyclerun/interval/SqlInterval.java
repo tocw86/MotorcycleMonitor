@@ -2,9 +2,11 @@ package com.software4bikers.motorcyclerun.interval;
 
 import android.location.Location;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.software4bikers.motorcyclerun.helpers.Helper;
+import com.software4bikers.motorcyclerun.models.CLocation;
 import com.software4bikers.motorcyclerun.sensors.SensorLocation;
 
 import java.security.Timestamp;
@@ -47,7 +49,7 @@ public class SqlInterval {
             frame.removeCallbacks(frameUpdate);
             //code here
             if(sensorLocation.hasActualLocation() && Integer.parseInt(sensorLocation.getActualSpeed()) > 0){
-                Location tmpLocation = sensorLocation.getActualLocation();
+                CLocation tmpLocation = sensorLocation.getActualLocation();
                 String ele = String.valueOf(tmpLocation.getAltitude());
                 String speed = sensorLocation.getActualSpeed();
                 String tempRoll = String.valueOf(sensorLocation.mainActivity.sensorRotation.getTempRoll());

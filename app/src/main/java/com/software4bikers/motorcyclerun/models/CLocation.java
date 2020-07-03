@@ -55,6 +55,13 @@ public class CLocation extends Location {
         return nSpeed;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "CLocation{" +
+                "bUseMetricUnits=" + bUseMetricUnits +
+                "getAccuracy=" + getAccuracy() +
+                "getAltitude=" + getAltitude() +
+                "getSpeed=" + getSpeed() +
+                '}';
+    }
 }
