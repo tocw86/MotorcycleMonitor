@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".GpxActivity"></activity>
+        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".GpxActivity" />
         <activity
             android:name=".StartActivity"
             android:screenOrientation="portrait"

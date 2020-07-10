@@ -2,10 +2,13 @@ package com.software4bikers.motorcyclerun.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.software4bikers.motorcyclerun.helpers.DbHelper;
+
+import java.util.List;
 
 public class RunSessionModel {
 
@@ -28,6 +31,11 @@ public class RunSessionModel {
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(RunSessionModel.RunSession.TABLE_NAME, null, values);
         return newRowId;
+    }
+
+    public Cursor getAllSessions(){
+            Cursor res = this.db.rawQuery("SELECT * FROM " + RunSessionModel.RunSession.TABLE_NAME, null);
+            return res;
     }
 
     public static class RunSession implements BaseColumns {

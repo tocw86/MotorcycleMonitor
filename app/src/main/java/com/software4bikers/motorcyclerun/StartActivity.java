@@ -78,7 +78,7 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
 
     public void setCalibrate(View view) {
         this.calibrateValue = sensorRotation.getRoll();
-        Toast.makeText(this, "Calibrated", Toast.LENGTH_LONG).show();;
+        Toast.makeText(this, "Calibrated", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
     }
 
     public void startHistoryActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), GpxActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
         startActivity(intent);
         finish();
         return;
