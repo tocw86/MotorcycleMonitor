@@ -2,6 +2,7 @@ package com.software4bikers.motorcyclerun;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -27,7 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
             Toast.makeText(this, "No history data", Toast.LENGTH_LONG).show();
         }else{
             ArrayList<SessionsData> list = SessionRepository.getSessionsData(res);
-            SessionsDataAdapter sessionsDataAdapter = new SessionsDataAdapter(getApplicationContext(), R.layout.list_item_sessions);
+            SessionsDataAdapter sessionsDataAdapter = new SessionsDataAdapter(getApplicationContext(), R.layout.list_item_sessions, this);
 
             for(SessionsData s : list){
                 sessionsDataAdapter.add(s);
@@ -37,5 +38,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void startGpxActivity(String sessionId){
+        Intent intent = new Intent(this, GpxActivity.class);
+        intent.putExtra("sessionId", sessionId);
+        startActivity(intent);
+        finish();
+        return;
     }
 }

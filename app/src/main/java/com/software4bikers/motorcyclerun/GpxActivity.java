@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +15,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -33,42 +38,66 @@ public class GpxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpx);
 
-        //handle permissions first, before map is created. not depicted here
-
-        //load/initialize the osmdroid configuration, this can be done
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
-        //tile servers will get you banned based on this string
-
-        //inflate and create the map
-        setContentView(R.layout.activity_gpx_view);
-
-        map = (MapView) findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-
-        IMapController mapController = map.getController();
-        mapController.setZoom(9.5);
-        GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
-        mapController.setCenter(startPoint);
-
-        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx),map);
-        this.mLocationOverlay.enableMyLocation();
-        map.getOverlays().add(this.mLocationOverlay);
-
-        requestPermissionsIfNecessary(new String[] {
+        Bundle extras = getIntent().getExtras();
+        String calibrateValueString =  extras.getString("sessionId");
+        requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 // Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
+        if(!calibrateValueString.isEmpty()) {
+            //handle permissions first, before map is created. not depicted here
+
+            //load/initialize the osmdroid configuration, this can be done
+            Context ctx = getApplicationContext();
+            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+            //setting this before the layout is inflated is a good idea
+            //it 'should' ensure that the map has a writable location for the map cache, even without permissions
+            //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
+            //see also StorageUtils
+            //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
+            //tile servers will get you banned based on this string
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //inflate and create the map
+            setContentView(R.layout.activity_gpx_view);
+
+            map = (MapView) findViewById(R.id.map);
+            map.setTileSource(TileSourceFactory.MAPNIK);
+
+            map.setBuiltInZoomControls(true);
+            map.setMultiTouchControls(true);
+
+            IMapController mapController = map.getController();
+            mapController.setZoom(9.5);
+
+            GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
+
+            RoadManager roadManager = new OSRMRoadManager(this);
+            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+            waypoints.add(startPoint);
+            mapController.setCenter(startPoint);
+            GeoPoint endPoint = new GeoPoint(48.4, -1.9);
+            waypoints.add(endPoint);
+            Road road = roadManager.getRoad(waypoints);
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+
+            this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
+            this.mLocationOverlay.enableMyLocation();
+
+        /*
+
+
+
+            map.getOverlays().add(this.mLocationOverlay);
+*/
+
+        }
     }
 
     @Override

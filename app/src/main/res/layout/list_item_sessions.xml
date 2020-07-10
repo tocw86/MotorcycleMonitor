@@ -38,9 +38,10 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/black"
-                android:id="@+id/createdAt"/>
+                android:id="@+id/createdAt"
+                />
 
-          <Button android:text="Zobacz"/>
+          <Button android:text="Zobacz" android:id="@+id/setSessionButton"/>
 
 
         </GridLayout>
