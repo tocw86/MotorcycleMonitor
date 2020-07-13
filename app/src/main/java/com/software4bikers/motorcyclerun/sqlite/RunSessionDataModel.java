@@ -2,24 +2,29 @@ package com.software4bikers.motorcyclerun.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.software4bikers.motorcyclerun.helpers.DbHelper;
 
+import org.osmdroid.util.GeoPoint;
+
+import java.util.ArrayList;
+
 public class RunSessionDataModel {
 
     private Context context;
     private DbHelper dbHelper;
-    private  SQLiteDatabase db;
+    private SQLiteDatabase db;
 
-    public RunSessionDataModel(Context context){
+    public RunSessionDataModel(Context context) {
         this.context = context;
         this.dbHelper = new DbHelper(this.context);
         this.db = this.dbHelper.getWritableDatabase();
     }
 
-   public void create(String userId, String sessionId, String lat, String lon, String ele, String roll, String speed ,String createdAt, String updatedAt){
+    public void create(String userId, String sessionId, String lat, String lon, String ele, String roll, String speed, String createdAt, String updatedAt) {
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(RunSessionDataModel.RunSessionData.COLUMN_NAME_USER_ID, userId);
@@ -33,6 +38,13 @@ public class RunSessionDataModel {
         values.put(RunSessionDataModel.RunSessionData.COLUMN_NAME_UPDATED_AT, updatedAt);
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(RunSessionDataModel.RunSessionData.TABLE_NAME, null, values);
+    }
+
+    public Cursor getRelatedDataWaypoints(String sessionId) {
+
+        Cursor res = this.db.rawQuery("SELECT lat,lon FROM " + RunSessionDataModel.RunSessionData.TABLE_NAME + " WHERE session_id = " + sessionId + " AND lon IS NOT NULL AND lat IS NOT NULL ORDER BY created_at ASC", null);
+        return res;
+
     }
 
     public static class RunSessionData implements BaseColumns {

@@ -9,7 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.software4bikers.motorcyclerun.adapters.SessionsDataAdapter;
-import com.software4bikers.motorcyclerun.models.SessionsData;
+import com.software4bikers.motorcyclerun.models.data.SessionsData;
 import com.software4bikers.motorcyclerun.repositories.SessionRepository;
 import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 

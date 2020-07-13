@@ -1,9 +1,10 @@
 package com.software4bikers.motorcyclerun.repositories;
 
 import android.database.Cursor;
-import android.util.Log;
 
-import com.software4bikers.motorcyclerun.models.SessionsData;
+import com.software4bikers.motorcyclerun.models.data.SessionsData;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,15 @@ public class SessionRepository {
         while (res.moveToNext()){
             SessionsData sessionsData = new SessionsData(res.getString(0), res.getString(1), res.getString(2),res.getString(3));
             tmp.add(sessionsData);
+        }
+        return tmp;
+    }
+
+    public static ArrayList<GeoPoint> getSessionDataModel(Cursor res, String sessionId) {
+        ArrayList<GeoPoint> tmp = new ArrayList<GeoPoint>();
+        while (res.moveToNext()){
+            GeoPoint geoPoint = new GeoPoint(Double.valueOf(res.getString(0)), Double.valueOf(res.getString(1)));
+            tmp.add(geoPoint);
         }
         return tmp;
     }

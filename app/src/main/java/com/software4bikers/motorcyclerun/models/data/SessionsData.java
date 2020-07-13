@@ -1,4 +1,4 @@
-package com.software4bikers.motorcyclerun.models;
+package com.software4bikers.motorcyclerun.models.data;
 
 public class SessionsData {
     public String id;

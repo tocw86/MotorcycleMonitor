@@ -1,7 +1,6 @@
 package com.software4bikers.motorcyclerun.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.software4bikers.motorcyclerun.GpxActivity;
 import com.software4bikers.motorcyclerun.HistoryActivity;
-import com.software4bikers.motorcyclerun.models.SessionsData;
+import com.software4bikers.motorcyclerun.models.data.SessionsData;
 
 import com.software4bikers.motorcyclerun.R;
 

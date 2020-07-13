@@ -2,6 +2,7 @@ package com.software4bikers.motorcyclerun;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.Manifest;
 import android.content.Context;
@@ -9,10 +10,15 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.se.omapi.Session;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.software4bikers.motorcyclerun.repositories.SessionRepository;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionDataModel;
+import com.software4bikers.motorcyclerun.sqlite.RunSessionModel;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -39,64 +45,56 @@ public class GpxActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gpx);
 
         Bundle extras = getIntent().getExtras();
-        String calibrateValueString =  extras.getString("sessionId");
+        String sessionId = extras.getString("sessionId");
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 // Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
-        if(!calibrateValueString.isEmpty()) {
-            //handle permissions first, before map is created. not depicted here
+        if (!sessionId.isEmpty()) {
+            RunSessionDataModel runSessionDataModel = new RunSessionDataModel(this);
+            Cursor res = runSessionDataModel.getRelatedDataWaypoints(sessionId);
 
-            //load/initialize the osmdroid configuration, this can be done
-            Context ctx = getApplicationContext();
-            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-            //setting this before the layout is inflated is a good idea
-            //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-            //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-            //see also StorageUtils
-            //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
-            //tile servers will get you banned based on this string
+            if (res.getCount() > 0) {
 
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
+                ArrayList<GeoPoint> waypoints = SessionRepository.getSessionDataModel(res, sessionId);
+                //handle permissions first, before map is created. not depicted here
 
-            //inflate and create the map
-            setContentView(R.layout.activity_gpx_view);
+                //load/initialize the osmdroid configuration, this can be done
+                Context ctx = getApplicationContext();
+                Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+                //setting this before the layout is inflated is a good idea
+                //it 'should' ensure that the map has a writable location for the map cache, even without permissions
+                //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
+                //see also StorageUtils
+                //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
+                //tile servers will get you banned based on this string
 
-            map = (MapView) findViewById(R.id.map);
-            map.setTileSource(TileSourceFactory.MAPNIK);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
 
-            map.setBuiltInZoomControls(true);
-            map.setMultiTouchControls(true);
+                //inflate and create the map
+                setContentView(R.layout.activity_gpx_view);
 
-            IMapController mapController = map.getController();
-            mapController.setZoom(9.5);
+                map = (MapView) findViewById(R.id.map);
+                map.setTileSource(TileSourceFactory.MAPNIK);
 
-            GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
+                map.setBuiltInZoomControls(true);
+                map.setMultiTouchControls(true);
 
-            RoadManager roadManager = new OSRMRoadManager(this);
-            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-            waypoints.add(startPoint);
-            mapController.setCenter(startPoint);
-            GeoPoint endPoint = new GeoPoint(48.4, -1.9);
-            waypoints.add(endPoint);
-            Road road = roadManager.getRoad(waypoints);
-            Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-            map.getOverlays().add(roadOverlay);
-            map.invalidate();
-
-            this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
-            this.mLocationOverlay.enableMyLocation();
-
-        /*
-
-
-
-            map.getOverlays().add(this.mLocationOverlay);
-*/
-
+                IMapController mapController = map.getController();
+                mapController.setZoom(17.5);
+                RoadManager roadManager = new OSRMRoadManager(this);
+                mapController.setCenter(waypoints.get(0));
+                Road road = roadManager.getRoad(waypoints);
+                Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                roadOverlay.getOutlinePaint().setStrokeWidth(20);
+                map.getOverlays().add(roadOverlay);
+                map.invalidate();
+                this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
+                this.mLocationOverlay.enableMyLocation();
+            }
         }
     }
 
