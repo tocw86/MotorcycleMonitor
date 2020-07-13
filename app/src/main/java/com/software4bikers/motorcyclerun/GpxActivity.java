@@ -44,6 +44,8 @@ public class GpxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpx);
 
+
+
         Bundle extras = getIntent().getExtras();
         String sessionId = extras.getString("sessionId");
         requestPermissionsIfNecessary(new String[]{
