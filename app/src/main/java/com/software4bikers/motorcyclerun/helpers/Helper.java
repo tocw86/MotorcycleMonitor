@@ -80,4 +80,14 @@ public class Helper {
         mainActivity.gameView.setDay(mainActivity.isDay);
     }
 
+    public static String parseMetersToKm(double distance) {
+
+        if(distance > 0 && distance > 1000){
+            String strDouble = String.format("%.2f", distance / 1000);
+            return strDouble + " km";
+        }else{
+            return String.valueOf(Math.round(distance)) + " m";
+        }
+
+    }
 }

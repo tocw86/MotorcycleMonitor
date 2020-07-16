@@ -41,10 +41,8 @@ public class RunSessionDataModel {
     }
 
     public Cursor getRelatedDataWaypoints(String sessionId) {
-
         Cursor res = this.db.rawQuery("SELECT lat,lon FROM " + RunSessionDataModel.RunSessionData.TABLE_NAME + " WHERE session_id = " + sessionId + " AND lon IS NOT NULL AND lat IS NOT NULL ORDER BY created_at ASC", null);
         return res;
-
     }
 
     public static class RunSessionData implements BaseColumns {
