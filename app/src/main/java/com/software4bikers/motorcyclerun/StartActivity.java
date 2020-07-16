@@ -94,7 +94,5 @@ public class StartActivity extends AppCompatActivity implements SensorRotationCa
     public void startHistoryActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
         startActivity(intent);
-        finish();
-        return;
     }
 }

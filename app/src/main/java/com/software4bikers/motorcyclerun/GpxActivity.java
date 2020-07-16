@@ -1,5 +1,6 @@
 package com.software4bikers.motorcyclerun;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.se.omapi.Session;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -43,6 +45,9 @@ public class GpxActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpx);
+
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Bundle extras = getIntent().getExtras();
         String sessionId = extras.getString("sessionId");
@@ -149,4 +154,17 @@ public class GpxActivity extends AppCompatActivity {
         }
     }
 
+/*    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 }

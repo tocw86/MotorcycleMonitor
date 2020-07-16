@@ -44,7 +44,5 @@ public class HistoryActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GpxActivity.class);
         intent.putExtra("sessionId", sessionId);
         startActivity(intent);
-        finish();
-        return;
     }
 }
