@@ -45,6 +45,11 @@ public class RunSessionDataModel {
         return res;
     }
 
+    public Cursor getAvgSpeedFromRelatedData(String sessionId) {
+        Cursor res = this.db.rawQuery("SELECT speed FROM " + RunSessionDataModel.RunSessionData.TABLE_NAME + " WHERE session_id = " + sessionId + " AND lon IS NOT NULL AND lat IS NOT NULL AND speed IS NOT NULL ORDER BY created_at ASC", null);
+        return res;
+    }
+
     public static class RunSessionData implements BaseColumns {
         public static final String TABLE_NAME = "run_sessions_data";
         public static final String COLUMN_NAME_ID = "id";

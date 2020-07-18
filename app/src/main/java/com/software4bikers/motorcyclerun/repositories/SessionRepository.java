@@ -2,11 +2,13 @@ package com.software4bikers.motorcyclerun.repositories;
 
 import android.database.Cursor;
 
+import com.software4bikers.motorcyclerun.helpers.Helper;
 import com.software4bikers.motorcyclerun.models.data.SessionsData;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SessionRepository {
     public static ArrayList<SessionsData> getSessionsData(Cursor res) {
@@ -25,5 +27,16 @@ public class SessionRepository {
             tmp.add(geoPoint);
         }
         return tmp;
+    }
+
+    public static String getAvgSpeedFromSqlData(Cursor res) {
+        List<Integer> tmp = new ArrayList<Integer>();
+        while (res.moveToNext()){
+            int speed = Integer.parseInt(res.getString(0));
+            tmp.add(speed);
+        }
+        double avg = Helper.median(tmp);
+        String avgSpeed = String.valueOf(avg);
+        return  avgSpeed + " km/h";
     }
 }

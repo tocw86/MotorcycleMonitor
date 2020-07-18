@@ -43,12 +43,14 @@ public class GpxActivity extends AppCompatActivity {
     private MapView map = null;
     private MyLocationNewOverlay mLocationOverlay;
     public TextView totalDistance;
+    public TextView avgSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpx_view);
         this.totalDistance = (TextView) findViewById(R.id.totalDistance);
+        this.avgSpeed = (TextView) findViewById(R.id.avgSpeed);
         Bundle extras = getIntent().getExtras();
         String sessionId = extras.getString("sessionId");
         requestPermissionsIfNecessary(new String[]{
@@ -60,8 +62,12 @@ public class GpxActivity extends AppCompatActivity {
         if (!sessionId.isEmpty()) {
             RunSessionDataModel runSessionDataModel = new RunSessionDataModel(this);
             Cursor res = runSessionDataModel.getRelatedDataWaypoints(sessionId);
-
+            Cursor avgSpeedRes = runSessionDataModel.getAvgSpeedFromRelatedData(sessionId);
             if (res.getCount() > 0) {
+
+                if(avgSpeedRes.getCount() > 0){
+                    this.avgSpeed.setText(SessionRepository.getAvgSpeedFromSqlData(avgSpeedRes));
+                }
 
                 ArrayList<GeoPoint> waypoints = SessionRepository.getSessionDataModel(res, sessionId);
 
@@ -105,7 +111,6 @@ public class GpxActivity extends AppCompatActivity {
 
                     String totalDistance = Helper.parseMetersToKm(roadOverlay.getDistance());
                     this.totalDistance.setText(totalDistance);
-
                 }
 
             }
