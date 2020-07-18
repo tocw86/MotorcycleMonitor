@@ -12,13 +12,8 @@
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryActivity"></activity>
-        <activity android:name=".GpxActivity"
-            >
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".HistoryActivity" />
-        </activity>
+        <activity android:name=".HistoryActivity" android:parentActivityName=".StartActivity"></activity>
+        <activity android:name=".GpxActivity" android:parentActivityName=".StartActivity"/>
         <activity
             android:name=".StartActivity"
             android:screenOrientation="portrait"
